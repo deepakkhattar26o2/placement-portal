@@ -1,6 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -28,8 +28,8 @@ export default function LoginForm() {
       });
   };
   return (
-    <div className="flex items-center justify-center h-screen bg-[#b46aff]">
-      <div className="flex flex-col justify-center px-6 py-12 lg:px-8 bg-[#f8f1ff] h-[50%] w-[25vw] border-black  rounded-xl shadow-2xl">
+    <div className="flex items-center justify-center h-screen bg-primary">
+      <div className="flex flex-col justify-center px-6 py-12 lg:px-8 bg-third h-[50%] w-[25vw] border-black rounded-xl shadow-lg shadow-white">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in to your account
@@ -75,7 +75,7 @@ export default function LoginForm() {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a className="font-semibold text-[#52489c] hover:text-[#796ec7]">
+                  <a className="font-semibold text-secondary hover:text-[#0073ff] hover:cursor-pointer">
                     Forgot password?
                   </a>
                 </div>
@@ -99,7 +99,7 @@ export default function LoginForm() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-[#52489c] px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#796ec7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-secondary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#0073ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Sign in
               </button>
@@ -107,7 +107,6 @@ export default function LoginForm() {
           </form>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 }

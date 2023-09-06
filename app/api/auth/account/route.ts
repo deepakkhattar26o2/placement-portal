@@ -1,12 +1,8 @@
 import prisma from "@/prisma/PrismaClient";
+import { AccountPatchRequest, SignupRequest } from "@/types";
 import { Company } from "@prisma/client";
 import * as bcr from "bcrypt";
 import { NextResponse } from "next/server";
-interface SignupRequest {
-  email: string;
-  password: string;
-  name: string;
-}
 
 function validate(body: SignupRequest): [boolean, string] {
   if (!body.email || !body.email.endsWith("gmail.com")) return [false, "email"];
@@ -42,6 +38,38 @@ export async function POST(req: Request) {
       data: body,
     });
     return NextResponse.json({ message: "Account created" }, { status: 200 });
+  } catch (e: any) {
+    return NextResponse.json({ message: e.message }, { status: 500 });
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    let id = searchParams.get("id");
+    if (Number(id)) {
+      let acc = await prisma.company.findFirst({ where: { id: Number(id) } });
+      return NextResponse.json({ acc: acc });
+    } else {
+      return NextResponse.json(
+        { message: "Invalid Account Id" },
+        { status: 400 }
+      );
+    }
+  } catch (e: any) {
+    return NextResponse.json({ message: e.message }, { status: 500 });
+  }
+}
+
+
+export async function PATCH(req: Request) {
+  try {
+    const body: AccountPatchRequest = await req.json();
+    let update = await prisma.company.update({
+      where: { id: body.id },
+      data: body,
+    });
+    return NextResponse.json({message : "success!"})
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }

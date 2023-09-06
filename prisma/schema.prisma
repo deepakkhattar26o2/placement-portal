@@ -8,15 +8,16 @@ datasource db {
 }
 
 model Company {
-  id             Int              @id @default(autoincrement())
-  email          String           @unique
-  password       String
-  name           String           @unique
-  about          String?
-  website        String?
-  role           Role             @default(COMPANY)
-  created_at     DateTime         @default(now())
-  PlacementDrive PlacementDrive[]
+  id                  Int              @id @default(autoincrement())
+  email               String           @unique
+  password            String
+  name                String           @unique
+  about               String?
+  website             String?
+  has_logo_attachment Boolean          @default(false)
+  role                Role             @default(COMPANY)
+  PlacementDrive      PlacementDrive[]
+  created_at          DateTime         @default(now())
 }
 
 model PlacementDrive {
@@ -34,9 +35,9 @@ model PlacementDrive {
   bond                 String?
   skills_required      String[]
   placement_process    String
-  created_at           DateTime       @default(now())
   Company              Company?       @relation(fields: [companyId], references: [id])
   StudentDrive         StudentDrive[]
+  created_at           DateTime       @default(now())
 }
 
 model StudentDrive {

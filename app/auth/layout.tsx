@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaRegChartBar, FaPlus, FaHome, FaUserAlt } from "react-icons/fa";
+import { ToastContainer } from "react-toastify";
 
 function SideBarIcon({ icon, text, selectedProp }: any) {
   return (
@@ -51,7 +52,7 @@ function SideBar() {
   return (
     <div
       className="fixed top-0 left-0 h-screen w-16 m-0
-        flex flex-col bg-gray-800 shadow-lg 
+        flex flex-col bg-black shadow-sm shadow-white 
         "
     >
       {temp.map((ele, idx) => {
@@ -77,7 +78,7 @@ export default function SideBarLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex pl-16 h-screen w-screen bg-primary">
+    <div className="flex flex-col pl-16 h-screen w-auto bg-gray-200">
       <SideBar />
       {children}
     </div>
