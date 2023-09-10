@@ -2,6 +2,7 @@ import prisma from "@/prisma/PrismaClient";
 import { AccountPatchRequest, SignupRequest } from "@/types";
 import { Company } from "@prisma/client";
 import * as bcr from "bcrypt";
+import * as jwt from 'jsonwebtoken'
 import { NextResponse } from "next/server";
 
 function validate(body: SignupRequest): [boolean, string] {
@@ -37,7 +38,10 @@ export async function POST(req: Request) {
     let _acc: Company | { password?: any } = await prisma.company.create({
       data: body,
     });
-    return NextResponse.json({ message: "Account created" }, { status: 200 });
+    delete _acc.password;
+    let token = jwt.sign(_acc, String(process.env.JWT_SECRET));
+    
+    return NextResponse.json({ token : token , message: "Account created" }, { status: 200 });
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }
@@ -47,7 +51,7 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     let id = searchParams.get("id");
-    if (Number(id)) {
+    if (Number(id) || Number(id)==0) {
       let acc = await prisma.company.findFirst({ where: { id: Number(id) } });
       return NextResponse.json({ acc: acc });
     } else {

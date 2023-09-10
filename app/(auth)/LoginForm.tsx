@@ -1,7 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -12,7 +11,7 @@ export default function LoginForm() {
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
     axios
-      .post("api/auth/login", {
+      .post("api/login", {
         email: email,
         password: password,
       })

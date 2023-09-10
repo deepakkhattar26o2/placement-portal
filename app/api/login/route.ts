@@ -41,6 +41,7 @@ export async function POST(req: Request) {
     if(!match){
       return NextResponse.json({message : "Wrong Password"}, {status : 409});
     }
+    delete acc.password;
     let token = jwt.sign(acc, String(process.env.JWT_SECRET));
     return NextResponse.json({user: acc, token : token})
   } catch (e: any) {

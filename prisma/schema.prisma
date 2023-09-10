@@ -22,20 +22,22 @@ model Company {
 
 model PlacementDrive {
   id                   Int            @id @default(autoincrement())
-  companyId            Int?
+  company_id           Int
   eligibility_criteria String
   batch_requried       Int
   type_of_drive        String
-  date_of_drive        String
   positions            String[]
   stream_required      String[]
+  skills_required      String[]
   job_profile          String
   job_location         String
   pay_package          String
   bond                 String?
-  skills_required      String[]
   placement_process    String
-  Company              Company?       @relation(fields: [companyId], references: [id])
+  has_logo_attached    Boolean        @default(false)
+  date_of_drive        DateTime
+  closes_at            DateTime
+  Company              Company?       @relation(fields: [company_id], references: [id])
   StudentDrive         StudentDrive[]
   created_at           DateTime       @default(now())
 }
