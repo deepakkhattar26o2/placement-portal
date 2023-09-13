@@ -18,6 +18,7 @@ export default function LoginForm() {
       .then(({ data }) => {
         //TODO store token for auth
         console.log(data);
+        localStorage.setItem("token", data.token);
         router.push("/auth/home");
       })
       .catch((err) => {

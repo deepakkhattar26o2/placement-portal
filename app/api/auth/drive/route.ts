@@ -9,7 +9,10 @@ function validate(body: PlacementDriveRequest): [boolean, string] {
   if (!body.closes_at) return [false, "closing time"];
   if (!body.company_id) return [false, "company id"];
   if (!body.date_of_drive) return [false, "date of drive"];
-  if (!body.eligibility_criteria) return [false, "eligibility criteria"];
+  if (!body.current_cgpa_cutoff) return [false, "current cgpa cutoff"];
+  if (!body.matric_result_cutoff) return [false, "matric cgpa cutoff"];
+  if (!body.hsc_result_cutoff) return [false, "hsc cgpa cutoff"];
+  if (body.allowed_backlogs===undefined) return [false, "current cgpa cutoff"];
   if (!body.job_location) return [false, "job location"];
   if (!body.job_profile) return [false, "job profile"];
   if (!body.pay_package) return [false, "pay package"];

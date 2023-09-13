@@ -13,8 +13,12 @@ export interface SignupRequest {
 
 export interface PlacementDriveRequest {
   company_id: number;
-  eligibility_criteria: string;
-  batch_requried: Int;
+  other_eligibility_criteria: string;
+  current_cgpa_cutoff: number;
+  matric_result_cutoff: number;
+  hsc_result_cutoff: number;
+  allowed_backlogs: number;
+  batch_requried: number;
   type_of_drive: string;
   positions: string[];
   stream_required: string[];
@@ -29,9 +33,9 @@ export interface PlacementDriveRequest {
 }
 
 export interface DrivePatchRequest {
-  id : number;
+  id: number;
   eligibility_criteria?: string;
-  batch_requried?: Int;
+  batch_requried?: number;
   type_of_drive?: string;
   positions?: string[];
   stream_required?: string[];

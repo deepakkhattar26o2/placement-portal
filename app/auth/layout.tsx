@@ -2,8 +2,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { FaRegChartBar, FaPlus, FaHome, FaUserAlt } from "react-icons/fa";
-import { ToastContainer } from "react-toastify";
+import {
+  FaRegChartBar,
+  FaPlus,
+  FaHome,
+  FaUserAlt,
+  FaBook,
+} from "react-icons/fa";
 
 function SideBarIcon({ icon, text, selectedProp }: any) {
   return (
@@ -33,20 +38,22 @@ function SideBarIcon({ icon, text, selectedProp }: any) {
 
 let temp = [
   [<FaHome key={0} size="22" />, "Home", "home"],
-  [<FaPlus key = {1} size="22" />, "Create Drive", "create"],
-  [<FaRegChartBar key={2} size="22" />, "Current Drive", "current"],
-  [<FaUserAlt key = {3}size="22" />, "Profile", "profile"],
+  [<FaPlus key={1} size="22" />, "Create Drive", "create"],
+  [<FaBook key={2} size="22" />, "Current Drive", "current"],
+  [<FaRegChartBar key={3} size="22" />, "Past Drives", "all"],
+  [<FaUserAlt key={4} size="22" />, "Profile", "profile"],
 ];
 function setValidId(path: string, setId: any) {
-  if(path.includes('home')) setId(0);
-  else if(path.includes('create')) setId(1);
-  else if(path.includes('current')) setId(2);
-  else if(path.includes('profile')) setId(3);
+  if (path.includes("home")) setId(0);
+  else if (path.includes("create")) setId(1);
+  else if (path.includes("current")) setId(2);
+  else if (path.includes("all")) setId(3);
+  else if (path.includes("profile")) setId(4);
 }
 function SideBar() {
   const [id, setId] = useState<number>();
   const pathname = usePathname();
-  if (id==undefined) {
+  if (id == undefined) {
     setValidId(pathname, setId);
   }
   return (
@@ -78,7 +85,7 @@ export default function SideBarLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col pl-16 h-screen w-auto bg-gray-200">
+    <div className="flex flex-col pl-16 h-screen overflow-auto w-auto bg-gray-200">
       <SideBar />
       {children}
     </div>

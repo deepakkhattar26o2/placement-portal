@@ -10,7 +10,7 @@ async function getAccount() {
 export default async function Profile() {
   let acc = await getAccount();
   return (
-    <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-xl">
+    <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-xl shadow-xl">
       <Link href="/auth/profile/edit">
         <button className="fixed bg-secondary text-third hover:bg-[#0073ff] top-12 right-12 h-10 w-20 rounded-lg m-2">
           Edit

@@ -22,17 +22,23 @@ function handleImageUpload(img: any) {
   let data = new FormData();
   data.append("file", img);
   axios
-    .post(`${process.env.NEXT_PUBLIC_EXTERNAL_SERVER}/user/upload?attachment_type=pfp`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        authorization:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJkZWVwYWtraGF0dGFyMXNAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTMkTk02WDlHV054SlEuOVhHdGMzRjJmZWxacWNRLllmUDdQZFBKMFVHOWRaZnhGalM2QXd2N20iLCJuYW1lIjoidmFsaGFsbGExMjM0IiwiYWJvdXQiOiJIZWhlIEh1aHUiLCJ3ZWJzaXRlIjoid3d3LnlvdXR1YmUuY29tIiwiaGFzX2xvZ29fYXR0YWNobWVudCI6dHJ1ZSwicm9sZSI6IkNPTVBBTlkiLCJjcmVhdGVkX2F0IjoiMjAyMy0wOS0wM1QxNzo1MjowMC45MzVaIiwiaWF0IjoxNjk0MzQ1NjM5fQ.wFLrjgiU3BBAmpmhVJDq_cdgwuJ2BFTHDVwkovRdiO8",
-      },
+    .post(
+      `${process.env.NEXT_PUBLIC_EXTERNAL_SERVER}/user/upload?attachment_type=pfp`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: localStorage.getItem("token"),
+        },
+      }
+    )
+    .then(() => {
+      toast.success("Logo Uploaded Successfully!", { autoClose: 1000 });
     })
-    .then(()=>{toast.success("Logo Uploaded Successfully!", {autoClose : 1000})})
-    .catch((e : Error)=>{
-      console.log(e.message)
-      toast.error("Something went wrong with logo upload", {autoClose : 1000})});
+    .catch((e: Error) => {
+      console.log(e.message);
+      toast.error("Something went wrong with logo upload", { autoClose: 1000 });
+    });
 }
 
 function updateAccount(data: AccountPatchRequest, router: AppRouterInstance) {
@@ -56,7 +62,7 @@ export default function Profile() {
     setAccount(setAcc);
   }, []);
   return (
-    <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-xl">
+    <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-xl shadow-xl">
       <div className="fixed top-12 right-12 flex flex-col ">
         <button
           className="bg-secondary text-third hover:bg-[#0073ff] h-10 w-20 rounded-lg m-2"
@@ -69,7 +75,7 @@ export default function Profile() {
         <button
           className="bg-red-500 text-third hover:bg-[#ff6464] h-10 w-20 rounded-lg m-2"
           onClick={() => {
-            router.back();
+            router.push("/auth/profile");
           }}
         >
           Cancel
@@ -93,8 +99,11 @@ export default function Profile() {
                   width={200}
                   height={200}
                 />
-                <button className="bg-green-500 text-third hover:bg-[#59df60] h-10 w-20 rounded-lg m-2" 
-                onClick={(e)=>{handleImageUpload(file)}}
+                <button
+                  className="bg-green-500 text-third hover:bg-[#59df60] h-10 w-20 rounded-lg m-2"
+                  onClick={(e) => {
+                    handleImageUpload(file);
+                  }}
                 >
                   Upload
                 </button>
@@ -163,10 +172,7 @@ export default function Profile() {
                 className="p-1 mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
                 defaultValue={acc?.email}
                 placeholder="Email"
-                required
-                onChange={(e) => {
-                  setAcc({ ...acc, email: e.target.value });
-                }}
+                disabled
                 type="email"
               />
             </div>
@@ -186,7 +192,7 @@ export default function Profile() {
           </dl>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }

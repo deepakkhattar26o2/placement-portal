@@ -73,6 +73,7 @@ export async function PATCH(req: Request) {
       where: { id: body.id },
       data: body,
     });
+
     return NextResponse.json({message : "success!"})
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
