@@ -3,16 +3,19 @@ import { DrivePatchRequest, PlacementDriveRequest } from "@/types";
 import { NextResponse } from "next/server";
 
 function validate(body: PlacementDriveRequest): [boolean, string] {
-  if (!body.company_id) return [false, "company id"];
+  if (!body.company_name) return [false, "company name"];
+  if (!body.company_about) return [false, "about company"];
+  if (!body.company_website) return [false, "company website"];
+  if (!body.drive_name) return [false, "name"];
   if (!body.batch_requried) return [false, "batch"];
   if (!body.bond) return [false, "bond"];
   if (!body.closes_at) return [false, "closing time"];
-  if (!body.company_id) return [false, "company id"];
   if (!body.date_of_drive) return [false, "date of drive"];
   if (!body.current_cgpa_cutoff) return [false, "current cgpa cutoff"];
   if (!body.matric_result_cutoff) return [false, "matric cgpa cutoff"];
   if (!body.hsc_result_cutoff) return [false, "hsc cgpa cutoff"];
-  if (body.allowed_backlogs===undefined) return [false, "current cgpa cutoff"];
+  if (body.allowed_backlogs === undefined)
+    return [false, "current cgpa cutoff"];
   if (!body.job_location) return [false, "job location"];
   if (!body.job_profile) return [false, "job profile"];
   if (!body.pay_package) return [false, "pay package"];
@@ -29,11 +32,15 @@ export async function POST(req: Request) {
     const body: PlacementDriveRequest = await req.json();
     const validation = validate(body);
     if (!validation[0]) {
-      return NextResponse.json({ message: `Missing/Invalid ${validation[1]}` });
+      return NextResponse.json(
+        { message: `Missing/Invalid ${validation[1]}` },
+        { status: 400 }
+      );
     }
     let drive = await prisma.placementDrive.create({ data: body });
     return NextResponse.json({ message: "Drive created successfully!" });
   } catch (e: any) {
+    console.log(e.message);
     return NextResponse.json({ message: e.message }, { status: 500 });
   }
 }
@@ -42,10 +49,10 @@ export async function PATCH(req: Request) {
   try {
     const body: DrivePatchRequest = await req.json();
     let update = await prisma.placementDrive.update({
-      where : {id : body.id},
-      data : body
+      where: { id: body.id },
+      data: body,
     });
-    return NextResponse.json({message : "Drive Updated Successfully"})
+    return NextResponse.json({ message: "Drive Updated Successfully" });
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }

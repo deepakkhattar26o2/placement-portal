@@ -1,5 +1,5 @@
 "use client";
-import { Company } from "@prisma/client";
+import { University } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -54,7 +54,7 @@ function updateAccount(data: AccountPatchRequest, router: AppRouterInstance) {
 }
 
 export default function Profile() {
-  const [acc, setAcc] = useState<Company | any>();
+  const [acc, setAcc] = useState<University | any>();
   const [file, setFile] = useState<any>();
   const router = useRouter();
   const imgRef = useRef<any>();
@@ -62,7 +62,7 @@ export default function Profile() {
     setAccount(setAcc);
   }, []);
   return (
-    <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-xl shadow-xl">
+    <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-xl shadow-xl">
       <div className="fixed top-12 right-12 flex flex-col ">
         <button
           className="bg-secondary text-third hover:bg-[#0073ff] h-10 w-20 rounded-lg m-2"
@@ -110,7 +110,7 @@ export default function Profile() {
               </div>
             ) : (
               <Image
-                className="my-10 h-[200px] w-[200px] bg-slate-300 rounded-[50%] overflow-hidden border-2 shadow-lg"
+                className="my-10 h-[200px] w-[200px] bg-slate-300 rounded-[50%] overflow-hidden border-2 shadow-lg hover:cursor-pointer"
                 alt="Logo"
                 onClick={() => {
                   imgRef.current?.click();
@@ -122,17 +122,6 @@ export default function Profile() {
                 height={200}
               />
             )}
-            <input
-              type="file"
-              ref={imgRef}
-              className="invisible"
-              accept=".jpg, .jpeg, .png"
-              onChange={(e) => {
-                if (e.target.files) {
-                  setFile(e.target.files[0]);
-                }
-              }}
-            />
           </div>
         </div>
         <div className="mt-6 border-t border-gray-100">
@@ -181,7 +170,7 @@ export default function Profile() {
                 About
               </dt>
               <textarea
-                className="p-1 mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+                className="p-1 mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 overflow-y-scroll h-44"
                 defaultValue={acc?.about || ""}
                 onChange={(e) => {
                   setAcc({ ...acc, about: e.target.value });
@@ -192,6 +181,17 @@ export default function Profile() {
           </dl>
         </div>
       </div>
+      <input
+        type="file"
+        ref={imgRef}
+        className="invisible "
+        accept=".jpg, .jpeg, .png"
+        onChange={(e) => {
+          if (e.target.files) {
+            setFile(e.target.files[0]);
+          }
+        }}
+      />
       <ToastContainer />
     </div>
   );

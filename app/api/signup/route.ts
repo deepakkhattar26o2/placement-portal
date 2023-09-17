@@ -1,6 +1,6 @@
 import prisma from "@/prisma/PrismaClient";
 import { SignupRequest } from "@/types";
-import { Company } from "@prisma/client";
+import { University } from "@prisma/client";
 import { NextResponse } from "next/server";
 import * as bcr from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
@@ -16,6 +16,7 @@ function validate(body: SignupRequest): [boolean, string] {
     try {
       const body: SignupRequest = await req.json();
       //validate request body
+      console.log(body);
       const validation = validate(body);
       if (!validation[0]) {
         return NextResponse.json(
@@ -24,7 +25,7 @@ function validate(body: SignupRequest): [boolean, string] {
         );
       }
       //check for existing account
-      const acc: Company | null = await prisma.company.findFirst({
+      const acc: University | null = await prisma.university.findFirst({
         where: { email: body.email },
       });
   
@@ -35,7 +36,7 @@ function validate(body: SignupRequest): [boolean, string] {
         );
       }
       body.password = await bcr.hash(body.password, 13);
-      let _acc: Company | { password?: any } = await prisma.company.create({
+      let _acc: University | { password?: any } = await prisma.university.create({
         data: body,
       });
       delete _acc.password;

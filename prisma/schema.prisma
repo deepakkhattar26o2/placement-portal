@@ -7,65 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Company {
-  id                  Int              @id @default(autoincrement())
-  email               String           @unique
-  password            String
-  name                String           @unique
-  about               String?
-  website             String?
-  has_logo_attachment Boolean          @default(false)
-  role                Role             @default(COMPANY)
-  PlacementDrive      PlacementDrive[]
-  created_at          DateTime         @default(now())
-}
-
-model PlacementDrive {
-  id                         Int            @id @default(autoincrement())
-  company_id                 Int
-  
-  name                       String
-  positions                  String[]
-  skills_required            String[]
-  stream_required            String
-  
-  current_cgpa_cutoff        Float
-  matric_result_cutoff       Float
-  hsc_result_cutoff          Float
-  allowed_backlogs           Int
-
-  job_profile                String
-  
-  batch_requried             Int
-  placement_process          String
-  pay_package                String
-  other_eligibility_criteria String?
-  
-  has_logo_attached          Boolean        @default(false)
-  
-
-  type_of_drive              String
-  job_location               String
-  bond                       String?
-  date_of_drive              DateTime
-  
-  closes_at                  DateTime
-  Company                    Company?       @relation(fields: [company_id], references: [id])
-  StudentDrive               StudentDrive[]
-  created_at                 DateTime       @default(now())
-}
-
-model StudentDrive {
-  id                Int            @id @default(autoincrement())
-  student_id        Int
-  selected_resume   String
-  selected_position String
-  drive_id          Int
-  created_at        DateTime       @default(now())
-  PlacementDrive    PlacementDrive @relation(fields: [drive_id], references: [id])
-  User              User           @relation(fields: [student_id], references: [id])
-}
-
 model User {
   id                       Int            @id @default(autoincrement())
   university_email         String         @unique
@@ -94,10 +35,62 @@ model User {
   has_pfp_attachment       Boolean        @default(false)
   role                     Role           @default(USER)
   created_at               DateTime       @default(now())
-  StudentDrive             StudentDrive[]
+  drives                   StudentDrive[] @relation("student-drive")
+}
+
+model PlacementDrive {
+  id                         Int            @id @default(autoincrement())
+  batch_requried             Int
+  type_of_drive              String
+  positions                  String[]
+  stream_required            String
+  job_profile                String
+  job_location               String
+  pay_package                String
+  bond                       String?
+  skills_required            String[]
+  placement_process          String
+  created_at                 DateTime       @default(now())
+  closes_at                  DateTime
+  date_of_drive              DateTime
+  has_logo_attached          Boolean        @default(false)
+  allowed_backlogs           Int
+  current_cgpa_cutoff        Float
+  hsc_result_cutoff          Float
+  matric_result_cutoff       Float
+  other_eligibility_criteria String?
+  company_about              String?
+  company_name               String         @unique
+  company_website            String?
+  drive_name                 String
+  has_logo_attachment        Boolean        @default(false)
+  participants               StudentDrive[] @relation("participants")
+}
+
+model StudentDrive {
+  id                Int            @id @default(autoincrement())
+  student_id        Int
+  selected_resume   String
+  selected_position String
+  drive_id          Int
+  created_at        DateTime       @default(now())
+  drive             PlacementDrive @relation("participants", fields: [drive_id], references: [id])
+  student           User           @relation("student-drive", fields: [student_id], references: [id])
+}
+
+model University {
+  id                  Int      @id @default(autoincrement())
+  email               String   @unique
+  password            String
+  name                String
+  about               String?
+  website             String?
+  role                Role     @default(UNIVERSITY)
+  has_logo_attachment Boolean  @default(false)
+  created_at          DateTime @default(now())
 }
 
 enum Role {
   USER
-  COMPANY
+  UNIVERSITY
 }

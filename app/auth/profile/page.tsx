@@ -3,14 +3,14 @@ import Image from "next/image";
 import prisma from "@/prisma/PrismaClient";
 
 async function getAccount() {
-  let acc = await prisma.company.findFirst({ where: { id: 1 } });
+  let acc = await prisma.university .findFirst({ where: { id: 1 } });
   return acc;
 }
 
 export default async function Profile() {
   let acc = await getAccount();
   return (
-    <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-xl shadow-xl">
+    <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
       <Link href="/auth/profile/edit">
         <button className="fixed bg-secondary text-third hover:bg-[#0073ff] top-12 right-12 h-10 w-20 rounded-lg m-2">
           Edit
@@ -67,7 +67,7 @@ export default async function Profile() {
               <dt className="text-sm font-medium leading-6 text-gray-900">
                 About
               </dt>
-              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+              <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 overflow-y-scroll h-44">
                 {acc?.about}
               </dd>
             </div>

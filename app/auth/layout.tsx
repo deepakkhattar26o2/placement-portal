@@ -39,16 +39,14 @@ function SideBarIcon({ icon, text, selectedProp }: any) {
 let temp = [
   [<FaHome key={0} size="22" />, "Home", "home"],
   [<FaPlus key={1} size="22" />, "Create Drive", "create"],
-  [<FaBook key={2} size="22" />, "Current Drive", "current"],
-  [<FaRegChartBar key={3} size="22" />, "Past Drives", "all"],
-  [<FaUserAlt key={4} size="22" />, "Profile", "profile"],
+  [<FaRegChartBar key={2} size="22" />, "All Drives", "all"],
+  [<FaUserAlt key={3} size="22" />, "Profile", "profile"],
 ];
 function setValidId(path: string, setId: any) {
   if (path.includes("home")) setId(0);
   else if (path.includes("create")) setId(1);
-  else if (path.includes("current")) setId(2);
-  else if (path.includes("all")) setId(3);
-  else if (path.includes("profile")) setId(4);
+  else if (path.includes("all")) setId(2);
+  else if (path.includes("profile")) setId(3);
 }
 function SideBar() {
   const [id, setId] = useState<number>();

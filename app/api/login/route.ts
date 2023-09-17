@@ -2,7 +2,7 @@ import prisma from "@/prisma/PrismaClient";
 import { NextResponse } from "next/server";
 import * as bcr from "bcrypt";
 import * as jwt from "jsonwebtoken";
-import { Company } from "@prisma/client";
+import { University } from "@prisma/client";
 interface LoginRequest {
   email: string;
   password: string;
@@ -26,9 +26,10 @@ export async function POST(req: Request) {
       );
     }
     //check for existing account
-    const acc: Company | null| {password? : any} = await prisma.company.findFirst({
-      where: { email: body.email },
-    });
+    const acc: University | null | { password?: any } =
+      await prisma.university.findFirst({
+        where: { email: body.email },
+      });
 
     if (!acc) {
       return NextResponse.json(
@@ -37,13 +38,13 @@ export async function POST(req: Request) {
       );
     }
     //compare password hash
-    let match = await bcr.compare(body.password, acc.password)
-    if(!match){
-      return NextResponse.json({message : "Wrong Password"}, {status : 409});
+    let match = await bcr.compare(body.password, acc.password);
+    if (!match) {
+      return NextResponse.json({ message: "Wrong Password" }, { status: 409 });
     }
     delete acc.password;
     let token = jwt.sign(acc, String(process.env.JWT_SECRET));
-    return NextResponse.json({user: acc, token : token})
+    return NextResponse.json({ user: acc, token: token });
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }

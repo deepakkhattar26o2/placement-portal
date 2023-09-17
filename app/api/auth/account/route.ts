@@ -1,6 +1,6 @@
 import prisma from "@/prisma/PrismaClient";
 import { AccountPatchRequest, SignupRequest } from "@/types";
-import { Company } from "@prisma/client";
+import { University } from "@prisma/client";
 import * as bcr from "bcrypt";
 import * as jwt from 'jsonwebtoken'
 import { NextResponse } from "next/server";
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       );
     }
     //check for existing account
-    const acc: Company | null = await prisma.company.findFirst({
+    const acc: University | null = await prisma.university.findFirst({
       where: { email: body.email },
     });
 
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
       );
     }
     body.password = await bcr.hash(body.password, 13);
-    let _acc: Company | { password?: any } = await prisma.company.create({
+    let _acc: University | { password?: any } = await prisma.university.create({
       data: body,
     });
     delete _acc.password;
@@ -52,7 +52,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     let id = searchParams.get("id");
     if (Number(id) || Number(id)==0) {
-      let acc = await prisma.company.findFirst({ where: { id: Number(id) } });
+      let acc = await prisma.university.findFirst({ where: { id: Number(id) } });
       return NextResponse.json({ acc: acc });
     } else {
       return NextResponse.json(
@@ -69,7 +69,7 @@ export async function GET(req: Request) {
 export async function PATCH(req: Request) {
   try {
     const body: AccountPatchRequest = await req.json();
-    let update = await prisma.company.update({
+    let update = await prisma.university.update({
       where: { id: body.id },
       data: body,
     });
