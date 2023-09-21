@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model Student {
   id                       Int            @id @default(autoincrement())
   university_email         String         @unique
   first_name               String
@@ -33,7 +33,7 @@ model User {
   has_resume2_attachment   Boolean        @default(false)
   has_resume3_attachment   Boolean        @default(false)
   has_pfp_attachment       Boolean        @default(false)
-  role                     Role           @default(USER)
+  role                     Role           @default(STUDENT)
   created_at               DateTime       @default(now())
   drives                   StudentDrive[] @relation("student-drive")
 }
@@ -64,6 +64,7 @@ model PlacementDrive {
   company_website            String?
   drive_name                 String
   has_logo_attachment        Boolean        @default(false)
+  has_jd_attachment          Boolean        @default(false)
   participants               StudentDrive[] @relation("participants")
 }
 
@@ -75,7 +76,7 @@ model StudentDrive {
   drive_id          Int
   created_at        DateTime       @default(now())
   drive             PlacementDrive @relation("participants", fields: [drive_id], references: [id])
-  student           User           @relation("student-drive", fields: [student_id], references: [id])
+  student           Student           @relation("student-drive", fields: [student_id], references: [id])
 }
 
 model University {
@@ -91,6 +92,6 @@ model University {
 }
 
 enum Role {
-  USER
+  STUDENT
   UNIVERSITY
 }

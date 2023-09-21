@@ -1,11 +1,11 @@
 import prisma from "@/prisma/PrismaClient";
 import { SignupRequest } from "@/types";
-import { University } from "@prisma/client";
+import { Role, University } from "@prisma/client";
 import { NextResponse } from "next/server";
 import * as bcr from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 
-function validate(body: SignupRequest): [boolean, string] {
+function validate(body: SignupRequest & {role : Role}): [boolean, string] {
     if (!body.email || !body.email.endsWith("gmail.com")) return [false, "email"];
     if (!body.password) return [false, "password"];
     if (!body.name) return [false, "name"];
@@ -14,9 +14,8 @@ function validate(body: SignupRequest): [boolean, string] {
   
   export async function POST(req: Request) {
     try {
-      const body: SignupRequest = await req.json();
+      const body: SignupRequest & {role : Role} = await req.json();
       //validate request body
-      console.log(body);
       const validation = validate(body);
       if (!validation[0]) {
         return NextResponse.json(
@@ -35,7 +34,8 @@ function validate(body: SignupRequest): [boolean, string] {
           { status: 409 }
         );
       }
-      body.password = await bcr.hash(body.password, 13);
+      body.password = await bcr.hash(body.password, Number(process.env.BCR_SALTS));
+      body.role = Role.UNIVERSITY
       let _acc: University | { password?: any } = await prisma.university.create({
         data: body,
       });

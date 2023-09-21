@@ -9,7 +9,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
 function setAccount(setAcc: any) {
   axios
-    .get(`/api/auth/account?id=${1}`)
+    .get(`/api/uni/auth/account?id=${1}`)
     .then(({ data }) => {
       setAcc(data.acc);
     })

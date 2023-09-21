@@ -11,7 +11,7 @@ export default function LoginForm() {
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
     axios
-      .post("api/login", {
+      .post("api/uni/login", {
         email: email,
         password: password,
       })

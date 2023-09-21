@@ -12,38 +12,48 @@ export interface SignupRequest {
   role : "UNIVERSITY"
 }
 
+export interface StudentSignupRequest {
+  university_email: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  uid: string;
+}
+
+export interface StudentLoginRequest{
+  university_email : string;
+  password : string
+}
+
 export interface PlacementDriveRequest {
   company_about: string;
   company_name: string;
   company_website: string;
+  
   drive_name: string;
-
-  company_name: string;
-  company_about: string;
-  company_website: string;
-
+  type_of_drive: string;
+  date_of_drive: Date;
+  
+  bond: string;
+  placement_process: string;
+  closes_at: Date;
+  
   positions: string[];
   skills_required: string[];
   stream_required: string;
-
-  other_eligibility_criteria: string;
+  
   current_cgpa_cutoff: number;
   matric_result_cutoff: number;
   hsc_result_cutoff: number;
-
+  
+  other_eligibility_criteria: string;
   allowed_backlogs: number;
   batch_requried: number;
-
-  job_profile: string;
-  placement_process: string;
-
-  type_of_drive: string;
+  
+  
   job_location: string;
-  bond: string;
-  date_of_drive: Date;
-
+  job_profile: string;
   pay_package: string;
-  closes_at: Date;
 }
 
 export interface DrivePatchRequest {
