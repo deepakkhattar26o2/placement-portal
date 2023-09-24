@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function LoginForm() {
   };
   return (
     <div className="flex items-center justify-center h-screen bg-primary">
-      <div className="flex flex-col justify-center px-6 py-12 lg:px-8 bg-third h-[50%] w-[25vw] border-black rounded-xl shadow-lg shadow-white">
+      <div className="flex flex-col justify-center px-6 py-12 lg:px-8 bg-third h-auto w-[25vw] border-black rounded-xl shadow-lg shadow-white">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Sign in to your account
@@ -75,9 +76,9 @@ export default function LoginForm() {
                   Password
                 </label>
                 <div className="text-sm">
-                  <a className="font-semibold text-secondary hover:text-[#0073ff] hover:cursor-pointer">
+                  <Link href="/recovery" className="font-semibold text-secondary hover:text-[#0073ff] hover:cursor-pointer">
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="mt-2">
