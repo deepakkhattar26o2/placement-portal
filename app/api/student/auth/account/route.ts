@@ -1,10 +1,12 @@
 import prisma from "@/prisma/PrismaClient";
+import { StudentPatchRequest } from "@/types";
 import { Student } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { authDetails } from "../../../(helpers)/auth";
 
-export async function GET(req: Request) {
+export async function GET(r: Request) {
   try {
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(r.url);
     if (!searchParams.has("type")) {
       return NextResponse.json(
         { message: "Missing Request Type" },
@@ -32,5 +34,17 @@ export async function GET(req: Request) {
     }
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
+  }
+}
+
+export async function PATCH(r : Request){
+  try{
+    const body : StudentPatchRequest = await r.json();
+    const _user = authDetails(r);
+    let _update = await prisma.student.update({where : {id : _user.id}, data : body});
+    return NextResponse.json({message : "Data updated successfully!"}) 
+  }
+  catch(e : any){
+    return NextResponse.json({message : e.message}, {status : 500});
   }
 }

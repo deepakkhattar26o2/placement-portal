@@ -1,9 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import prisma from "@/prisma/PrismaClient";
-
 async function getAccount() {
-  let acc = await prisma.university .findFirst({ where: { id: 1 } });
+  let acc = await prisma.university .findFirst({ where: { id:  1} });
   return acc;
 }
 

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { sendMail } from "../(nodemailer)/promise";
+import { sendMail } from "../(helpers)/mailer";
 import * as rstr from "randomstring";
 import prisma from "@/prisma/PrismaClient";
 import * as bcr from "bcrypt";
+import { PasswordUpdateRequest } from "@/types";
 const sendOtpMail = async (email: string) => {
   const otp = rstr.generate(6);
 
@@ -60,14 +61,11 @@ export async function POST(r: Request) {
   }
 }
 
-type PatchRequest = { password: string } & (
-  | { user: "STUDENT"; university_email: string }
-  | { user: "UNIVERSITY"; email: string }
-);
+
 
 export async function PATCH(req: Request) {
   try {
-    const data: PatchRequest = await req.json();
+    const data: PasswordUpdateRequest = await req.json();
     let hash = await bcr.hash(data.password, Number(process.env.BCR_SALTS));
     if (data.user == "STUDENT") {
       let _update = await prisma.student.update({

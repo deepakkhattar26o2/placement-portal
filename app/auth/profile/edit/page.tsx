@@ -9,7 +9,11 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
 function setAccount(setAcc: any) {
   axios
-    .get(`/api/uni/auth/account?id=${1}`)
+    .get(`/api/uni/auth/account`, {
+      headers : {
+        "authorization" : localStorage.getItem("token")
+      }
+    })
     .then(({ data }) => {
       setAcc(data.acc);
     })
@@ -43,7 +47,7 @@ function handleImageUpload(img: any) {
 
 function updateAccount(data: AccountPatchRequest, router: AppRouterInstance) {
   axios
-    .patch("/api/auth/account", data)
+    .patch("/api/uni/auth/account", data)
     .then(() => {
       router.push("/auth/profile");
     })

@@ -7,10 +7,12 @@ import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     axios
       .post("api/uni/login", {
         email: email,
@@ -18,11 +20,12 @@ export default function LoginForm() {
       })
       .then(({ data }) => {
         //TODO store token for auth
-        console.log(data);
+        setLoading(false)
         localStorage.setItem("token", data.token);
         router.push("/auth/home");
       })
       .catch((err) => {
+        setLoading(false)
         if (err.status!=500 && err.response?.data?.message) {
           toast.error(err.response.data.message, { autoClose: 1000 });
         }
@@ -100,9 +103,10 @@ export default function LoginForm() {
             <div>
               <button
                 type="submit"
+                disabled={loading}
                 className="flex w-full justify-center rounded-md bg-secondary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#0073ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                {loading ? "Signing In...":"Sign in"}
               </button>
             </div>
           </form>

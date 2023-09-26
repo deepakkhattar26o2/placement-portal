@@ -62,7 +62,7 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     let id = searchParams.get("id");
-    if (Number(id)) {
+    if (Number(id) || Number(id)==0) {
       //case for a selective drive
       let drive = await prisma.placementDrive.findFirst({
         where: { id: Number(id) },
