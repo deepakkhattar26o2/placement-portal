@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { redirect, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   FaRegChartBar,
   FaPlus,
@@ -9,6 +10,7 @@ import {
   FaUserAlt,
   FaBook,
 } from "react-icons/fa";
+import { RedirectType } from "next/dist/client/components/redirect";
 
 function SideBarIcon({ icon, text, selectedProp }: any) {
   return (
@@ -82,10 +84,18 @@ export default function SideBarLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex flex-col pl-16 h-screen overflow-auto w-auto bg-gray-200">
-      <SideBar />
-      {children}
-    </div>
-  );
+  const { status } = useSession();
+  if (status == "loading") {
+    return <div>Loading...</div>;
+  }
+  if (status == "unauthenticated") {
+    redirect("/", RedirectType.replace);
+  } else {
+    return (
+      <div className="flex flex-col pl-16 h-screen overflow-auto w-auto bg-gray-200">
+        <SideBar />
+        {children}
+      </div>
+    );
+  }
 }

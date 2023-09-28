@@ -1,28 +1,32 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-
+import { signIn, useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { RedirectType } from "next/dist/client/components/redirect";
 export default function LoginForm() {
-  const router = useRouter();
+  const {status} = useSession();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const handleLogin = (e: FormEvent) => {
+  useEffect(()=>{
+    if(status=='authenticated'){
+      redirect('/auth/home', RedirectType.replace)
+    }
+  }, [status])
+  const handleLogin =async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     axios
-      .post("api/uni/login", {
+      .post("api/university/login", {
         email: email,
         password: password,
       })
-      .then(({ data }) => {
-        //TODO store token for auth
+      .then(async () => {
         setLoading(false)
-        localStorage.setItem("token", data.token);
-        router.push("/auth/home");
+        await signIn('credentials', {callbackUrl : "/auth/home", email : email, password : password});
       })
       .catch((err) => {
         setLoading(false)

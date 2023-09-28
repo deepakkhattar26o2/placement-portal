@@ -7,13 +7,10 @@ import { AccountPatchRequest } from "@/types";
 import { toast, ToastContainer } from "react-toastify";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
 function setAccount(setAcc: any) {
   axios
-    .get(`/api/uni/auth/account`, {
-      headers : {
-        "authorization" : localStorage.getItem("token")
-      }
-    })
+    .get(`/api/auth/university/account`)
     .then(({ data }) => {
       setAcc(data.acc);
     })
@@ -62,6 +59,7 @@ export default function Profile() {
   const [file, setFile] = useState<any>();
   const router = useRouter();
   const imgRef = useRef<any>();
+  const {data} = useSession();
   useEffect(() => {
     setAccount(setAcc);
   }, []);

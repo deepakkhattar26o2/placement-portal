@@ -2,21 +2,22 @@ import prisma from "@/prisma/PrismaClient";
 import { AccountPatchRequest, SignupRequest } from "@/types";
 import { University } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/auth/[...nextauth]/route";
+
 
 
 export async function GET(req: Request) {
   try {
-    const { searchParams } = new URL(req.url);
-    let id = searchParams.get("id");
-    if (Number(id) || Number(id)==0) {
-      let acc = await prisma.university.findFirst({ where: { id: Number(id) } });
-      return NextResponse.json({ acc: acc });
-    } else {
-      return NextResponse.json(
-        { message: "Invalid Account Id" },
-        { status: 400 }
-      );
+    const session = await getServerSession(authConfig); 
+    if(!session || !session.user){
+      throw new Error;
+    }     
+    let uni : University | null = await prisma.university.findFirst({where : {email : String(session.user.email)}})
+    if(!uni){
+      return NextResponse.json({message : "Invalid Account Token"}, {status : 409});
     }
+    return NextResponse.json({acc : uni});
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }

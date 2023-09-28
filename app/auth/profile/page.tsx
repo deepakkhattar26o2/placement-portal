@@ -1,8 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { authConfig } from "@/app/api/auth/[...nextauth]/route";
 import prisma from "@/prisma/PrismaClient";
 async function getAccount() {
-  let acc = await prisma.university .findFirst({ where: { id:  1} });
+  const data = await getServerSession(authConfig);
+  let acc = await prisma.university .findFirst({ where: { email:  String(data?.user?.email)} });
   return acc;
 }
 
