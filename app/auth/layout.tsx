@@ -1,17 +1,16 @@
 "use client";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import {
   FaRegChartBar,
   FaPlus,
   FaHome,
   FaUserAlt,
-  FaBook,
+  FaSignOutAlt,
 } from "react-icons/fa";
 import { RedirectType } from "next/dist/client/components/redirect";
-
 function SideBarIcon({ icon, text, selectedProp }: any) {
   return (
     <div
@@ -21,9 +20,9 @@ function SideBarIcon({ icon, text, selectedProp }: any) {
           ? "bg-third text-secondary rounded-xl"
           : "bg-secondary text-third rounded-3xl"
       }
-     h-12 my-3 w-12 mx-auto shadow-xl 
-     hover:rounded-xl hover:bg-third hover:text-secondary
-     transition-all duration-300 cursor-pointer group`}
+      h-12 my-3 w-12 mx-auto shadow-xl 
+      hover:rounded-xl hover:bg-third hover:text-secondary
+      transition-all duration-300 cursor-pointer group`}
     >
       {icon}
       <span
@@ -43,6 +42,14 @@ let temp = [
   [<FaPlus key={1} size="22" />, "Create Drive", "create"],
   [<FaRegChartBar key={2} size="22" />, "All Drives", "all"],
   [<FaUserAlt key={3} size="22" />, "Profile", "profile"],
+  [
+    <FaSignOutAlt key={4} size="22" />,
+    "Logout",
+    "logout",
+    () => {
+      signOut({ callbackUrl: "/" });
+    },
+  ],
 ];
 function setValidId(path: string, setId: any) {
   if (path.includes("home")) setId(0);
@@ -62,12 +69,16 @@ function SideBar() {
         flex flex-col bg-black shadow-sm shadow-white 
         "
     >
-      {temp.map((ele, idx) => {
+      {temp.map((ele: any, idx) => {
         return (
           <Link
             href={`/auth/${ele[2]}`}
             key={idx}
-            onClick={() => {
+            onClick={(e) => {
+              if (ele.length == 4) {
+                e.preventDefault();
+                ele[3]();
+              }
               console.log(idx);
               setId(idx);
             }}
