@@ -7,11 +7,11 @@ import { authConfig } from "@/app/api/auth/[...nextauth]/route";
 
 
 
-export async function GET(req: Request) {
+export async function GET(r: Request) {
   try {
     const session = await getServerSession(authConfig); 
     if(!session || !session.user){
-      throw new Error;
+      throw new Error("Invalid Session");
     }     
     let uni : University | null = await prisma.university.findFirst({where : {email : String(session.user.email)}})
     if(!uni){
@@ -24,9 +24,9 @@ export async function GET(req: Request) {
 }
 
 
-export async function PATCH(req: Request) {
+export async function PATCH(r: Request) {
   try {
-    const body: AccountPatchRequest = await req.json();
+    const body: AccountPatchRequest = await r.json();
     let update = await prisma.university.update({
       where: { id: body.id },
       data: body,

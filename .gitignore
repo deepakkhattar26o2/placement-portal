@@ -37,3 +37,10 @@ next-env.d.ts
 
 migrations
 .env
+U-*.pdf
+C-*.pdf
+S-*.pdf
+
+U-*.jpg
+C-*.jpg
+S-*.jpg

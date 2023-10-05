@@ -63,9 +63,9 @@ export async function POST(r: Request) {
 
 
 
-export async function PATCH(req: Request) {
+export async function PATCH(r: Request) {
   try {
-    const data: PasswordUpdateRequest = await req.json();
+    const data: PasswordUpdateRequest = await r.json();
     let hash = await bcr.hash(data.password, Number(process.env.BCR_SALTS));
     if (data.user == "STUDENT") {
       let _update = await prisma.student.update({

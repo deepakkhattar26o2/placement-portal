@@ -24,12 +24,11 @@ function handleImageUpload(img: any) {
   data.append("file", img);
   axios
     .post(
-      `${process.env.NEXT_PUBLIC_EXTERNAL_SERVER}/user/upload?attachment_type=pfp`,
+      `/api/upload?attachment_type=pfp&use=UNIVERSITY`,
       data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
-          authorization: localStorage.getItem("token"),
         },
       }
     )
@@ -44,7 +43,7 @@ function handleImageUpload(img: any) {
 
 function updateAccount(data: AccountPatchRequest, router: AppRouterInstance) {
   axios
-    .patch("/api/uni/auth/account", data)
+    .patch("/api/auth/university/account", data)
     .then(() => {
       router.push("/auth/profile");
     })
@@ -65,7 +64,7 @@ export default function Profile() {
   }, []);
   return (
     <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-xl shadow-xl">
-      <div className="fixed top-12 right-12 flex flex-col ">
+      <div className="fixed top-12 right-16 flex flex-col ">
         <button
           className="bg-secondary text-third hover:bg-[#0073ff] h-10 w-20 rounded-lg m-2"
           onClick={() => {
@@ -112,14 +111,12 @@ export default function Profile() {
               </div>
             ) : (
               <Image
-                className="my-10 h-[200px] w-[200px] bg-slate-300 rounded-[50%] overflow-hidden border-2 shadow-lg hover:cursor-pointer"
+                className="my-10 text-center h-[200px] w-[200px] bg-slate-300 rounded-[50%] overflow-hidden border-2 shadow-lg hover:cursor-pointer"
                 alt="Logo"
                 onClick={() => {
                   imgRef.current?.click();
                 }}
-                src={`${
-                  process.env.NEXT_PUBLIC_EXTERNAL_SERVER
-                }/uploads/${1}-c-pfp.jpg`}
+                src={`/U-${acc?.id}-pfp.jpg`}
                 width={200}
                 height={200}
               />

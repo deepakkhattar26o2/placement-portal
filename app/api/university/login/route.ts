@@ -1,7 +1,6 @@
 import prisma from "@/prisma/PrismaClient";
 import { NextResponse } from "next/server";
 import * as bcr from "bcrypt";
-import * as jwt from "jsonwebtoken";
 import { University } from "@prisma/client";
 interface LoginRequest {
   email: string;
@@ -14,9 +13,9 @@ function validate(body: LoginRequest): [boolean, string] {
   return [true, "success"];
 }
 
-export async function POST(req: Request) {
+export async function POST(r: Request) {
   try {
-    const body: LoginRequest = await req.json();
+    const body: LoginRequest = await r.json();
     //validate request body
     const validation = validate(body);
     if (!validation[0]) {
@@ -43,9 +42,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ message: "Wrong Password" }, { status: 409 });
     }
     delete acc.password;
-    let token = jwt.sign(acc, String(process.env.JWT_SECRET));
-    return NextResponse.json({ user: acc, token: token });
+    return NextResponse.json({ user: acc });
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }
+}
+
+export async function PATCH(r : Request){
+  const fdata = await r.formData();
+  const body = JSON.parse(JSON.stringify(fdata));
+  console.log(body);
+  return NextResponse.json({message : ""})
 }

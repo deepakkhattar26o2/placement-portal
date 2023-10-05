@@ -12,9 +12,9 @@ function validate(body: SignupRequest & {role : Role}): [boolean, string] {
     return [true, "success"];
   }
   
-  export async function POST(req: Request) {
+  export async function POST(r: Request) {
     try {
-      const body: SignupRequest & {role : Role} = await req.json();
+      const body: SignupRequest & {role : Role} = await r.json();
       //validate request body
       const validation = validate(body);
       if (!validation[0]) {

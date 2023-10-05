@@ -14,7 +14,7 @@ export default async function Profile() {
   return (
     <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
       <Link href="/auth/profile/edit">
-        <button className="fixed bg-secondary text-third hover:bg-[#0073ff] top-12 right-12 h-10 w-20 rounded-lg m-2">
+        <button className="fixed bg-secondary text-third hover:bg-[#0073ff] top-12 right-16 h-10 w-20 rounded-lg m-2">
           Edit
         </button>
       </Link>
@@ -25,9 +25,9 @@ export default async function Profile() {
           </h3>
           
           <Image
-          className="my-10 h-[200px] w-[200px] bg-slate-300 rounded-[50%] overflow-hidden border-2 shadow-lg"
+          className="my-10 h-[200px] w-[200px] text-center bg-slate-300 rounded-[50%] overflow-hidden border-2 shadow-lg"
             alt="Logo"
-            src={`${process.env.NEXT_PUBLIC_EXTERNAL_SERVER}/uploads/${1}-c-pfp.jpg`}
+            src={`/U-${acc?.id}-pfp.jpg`}
             width={200}
             height={200}
           />

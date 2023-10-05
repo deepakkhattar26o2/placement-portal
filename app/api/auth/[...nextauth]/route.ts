@@ -15,7 +15,7 @@ export const authConfig: NextAuthOptions = {
           placeholder: "password",
         },
       },
-      async authorize(credentials, req)  {
+      async authorize(credentials, r)  {
         if (!credentials || !credentials.email || !credentials.password) {
           return null;
         }
