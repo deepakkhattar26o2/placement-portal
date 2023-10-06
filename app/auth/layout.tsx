@@ -4,12 +4,14 @@ import { redirect, usePathname } from "next/navigation";
 import { useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import {
-  FaRegChartBar,
+  FaLayerGroup,
   FaPlus,
   FaHome,
   FaUserAlt,
   FaSignOutAlt,
 } from "react-icons/fa";
+import {MdGroups2} from 'react-icons/md'
+import {ImProfile} from 'react-icons/im'
 import { RedirectType } from "next/dist/client/components/redirect";
 function SideBarIcon({ icon, text, selectedProp }: any) {
   return (
@@ -40,8 +42,9 @@ function SideBarIcon({ icon, text, selectedProp }: any) {
 let temp = [
   [<FaHome key={0} size="22" />, "Home", "home"],
   [<FaPlus key={1} size="22" />, "Create Drive", "create"],
-  [<FaRegChartBar key={2} size="22" />, "All Drives", "all"],
-  [<FaUserAlt key={3} size="22" />, "Profile", "profile"],
+  [<FaLayerGroup key={2} size="22" />, "Drives", "drives"],
+  [<MdGroups2 key={4} size='22'/>, "Students", "students"],
+  [<ImProfile key={3} size="22" />, "Profile", "profile"],
   [
     <FaSignOutAlt key={4} size="22" />,
     "Logout",
