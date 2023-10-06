@@ -48,7 +48,7 @@ export interface PlacementDriveRequest {
 
   other_eligibility_criteria: string;
   allowed_backlogs: number;
-  batch_requried: number;
+  batch_required: number;
 
   job_location: string;
   job_profile: string;

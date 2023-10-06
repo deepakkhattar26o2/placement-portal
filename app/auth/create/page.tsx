@@ -1,25 +1,39 @@
 "use client";
-
+import { jsonToFormData } from "@/app/api/(helpers)/parsers";
 import { PlacementDriveRequest } from "@/types";
+import axios from "axios";
 import { FormEvent, useState } from "react";
-
-const handleSubmit = (e: FormEvent) => {
-  e.preventDefault();
-};
-
-const _format = (text : string) : string[]=>{
-  let arr = text.split(',').map(ele=>ele.replace(/ /g, ""))
-  return arr;
-}
+import { toast } from "react-toastify";
 
 export default function CreateDrivePage() {
-  const [driveData, setDriveData] = useState<PlacementDriveRequest | any>();
-  const [positions, setPositions] = useState("");
-  const [skills, setSkills] = useState("");
+  const [driveData, setDriveData] = useState<PlacementDriveRequest & any>();
+  const [logo, setLogo] = useState<File | null>();
+  const [jd, setJD] = useState<File | null>();
+  const createDrive = (e: FormEvent) => {
+    e.preventDefault();
+    let formData = jsonToFormData(driveData);
+    console.log(driveData)
+    if (jd) {
+      formData.append("job_description", jd);
+    }
+    if (logo) {
+      formData.append("company_logo", logo);
+    }
+    axios
+      .post("/api/auth/drive", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() =>
+        toast.success("Drive created Successfully", { autoClose: 1000 })
+      )
+      .catch((e) => toast.error("Something Went Wrong", { autoClose: 1000 }));
+  };
   return (
     <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-lg shadow-xl">
       <div className="text-3xl font-bold">Create Drive</div>
-      <form className="p-10 flex flex-col" onSubmit={handleSubmit}>
+      <form className="p-10 flex flex-col" onSubmit={createDrive}>
         <div className="shadow-lg rounded-lg p-6 border-2 bg-slate-100 mb-4">
           <div className="mb-4 font-semibold text-slate-500">
             Company Details
@@ -30,6 +44,7 @@ export default function CreateDrivePage() {
                 Company Name
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Company Name"
@@ -43,6 +58,7 @@ export default function CreateDrivePage() {
                 About Company
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Company About"
@@ -56,6 +72,7 @@ export default function CreateDrivePage() {
                 Company Website
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Company Website"
@@ -77,6 +94,7 @@ export default function CreateDrivePage() {
                 Drive Name
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Drive Name"
@@ -90,6 +108,7 @@ export default function CreateDrivePage() {
                 Type of Drive
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Type"
@@ -103,6 +122,7 @@ export default function CreateDrivePage() {
                 Drive Start Date
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="date"
                 placeholder="Date"
@@ -118,6 +138,7 @@ export default function CreateDrivePage() {
                 Bond
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Bond Description"
@@ -131,6 +152,7 @@ export default function CreateDrivePage() {
                 Placement Process
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 onChange={(e) => {
@@ -147,6 +169,7 @@ export default function CreateDrivePage() {
                 Form Close Date
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="date"
                 placeholder="Close Date"
@@ -162,6 +185,7 @@ export default function CreateDrivePage() {
                 Positions
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Positions offered"
@@ -175,9 +199,16 @@ export default function CreateDrivePage() {
                 Skills Required
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Good to have skills"
+                onChange={(e) =>
+                  setDriveData({
+                    ...driveData,
+                    skills_required: e.target.value,
+                  })
+                }
               />
             </div>
             <div>
@@ -185,9 +216,16 @@ export default function CreateDrivePage() {
                 Stream Required
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Stream"
+                onChange={(e) =>
+                  setDriveData({
+                    ...driveData,
+                    stream_required: e.target.value,
+                  })
+                }
               />
             </div>
           </div>
@@ -197,9 +235,16 @@ export default function CreateDrivePage() {
                 CGPA Cutoff
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="number"
                 placeholder="Current CGPA Cutoff"
+                onChange={(e) =>
+                  setDriveData({
+                    ...driveData,
+                    current_cgpa_cutoff: e.target.value,
+                  })
+                }
               />
             </div>
             <div>
@@ -207,9 +252,16 @@ export default function CreateDrivePage() {
                 Matric Cutoff
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="number"
                 placeholder="10th Result in %"
+                onChange={(e) =>
+                  setDriveData({
+                    ...driveData,
+                    matric_result_cutoff: e.target.value,
+                  })
+                }
               />
             </div>
             <div>
@@ -217,8 +269,15 @@ export default function CreateDrivePage() {
                 Intermediate Cutoff
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="number"
+                onChange={(e) =>
+                  setDriveData({
+                    ...driveData,
+                    hsc_result_cutoff: e.target.value,
+                  })
+                }
                 placeholder="12th Result in %"
               />
             </div>
@@ -229,8 +288,15 @@ export default function CreateDrivePage() {
                 Other Eligibilty Criteria
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
+                onChange={(e) =>
+                  setDriveData({
+                    ...driveData,
+                    other_eligibility_criteria: e.target.value,
+                  })
+                }
                 placeholder="Criteria"
               />
             </div>
@@ -239,8 +305,15 @@ export default function CreateDrivePage() {
                 Allowed Backlogs
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="number"
+                onChange={(e) =>
+                  setDriveData({
+                    ...driveData,
+                    allowed_backlogs: e.target.value,
+                  })
+                }
                 placeholder="No. of Backlogs"
               />
             </div>
@@ -249,8 +322,12 @@ export default function CreateDrivePage() {
                 Batch
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
+                onChange={(e) =>
+                  setDriveData({ ...driveData, batch_required: e.target.value })
+                }
                 placeholder="Batch Required(year)"
               />
             </div>
@@ -261,9 +338,13 @@ export default function CreateDrivePage() {
                 Job Locations
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Job Locations"
+                onChange={(e) =>
+                  setDriveData({ ...driveData, job_location: e.target.value })
+                }
               />
             </div>
             <div>
@@ -271,9 +352,13 @@ export default function CreateDrivePage() {
                 Job Profile
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Job Profile"
+                onChange={(e) =>
+                  setDriveData({ ...driveData, job_profile: e.target.value })
+                }
               />
             </div>
             <div>
@@ -281,9 +366,13 @@ export default function CreateDrivePage() {
                 Pay Package
               </label>
               <input
+                required
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="text"
                 placeholder="Pay Package Description"
+                onChange={(e) =>
+                  setDriveData({ ...driveData, pay_package: e.target.value })
+                }
               />
             </div>
           </div>
@@ -297,13 +386,14 @@ export default function CreateDrivePage() {
               </label>
 
               <input
+                required
                 type="file"
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight bg-white"
                 accept=".jpg, .jpeg, .png"
                 placeholder="Company Logo"
                 onChange={(e) => {
                   if (e.target.files) {
-                    // setFile(e.target.files[0]);
+                    setLogo(e.target.files[0]);
                   }
                 }}
               />
@@ -320,12 +410,11 @@ export default function CreateDrivePage() {
                 placeholder="Job Description"
                 onChange={(e) => {
                   if (e.target.files) {
-                    // setFile(e.target.files[0]);
+                    setJD(e.target.files[0]);
                   }
                 }}
               />
             </div>
-          
           </div>
         </div>
         <button

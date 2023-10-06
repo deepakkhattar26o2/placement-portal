@@ -47,10 +47,3 @@ export async function POST(r: Request) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }
 }
-
-export async function PATCH(r : Request){
-  const fdata = await r.formData();
-  const body = JSON.parse(JSON.stringify(fdata));
-  console.log(body);
-  return NextResponse.json({message : ""})
-}

@@ -5,24 +5,26 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authConfig } from "@/app/api/auth/[...nextauth]/route";
 
-
-
 export async function GET(r: Request) {
   try {
-    const session = await getServerSession(authConfig); 
-    if(!session || !session.user){
+    const session = await getServerSession(authConfig);
+    if (!session || !session.user) {
       throw new Error("Invalid Session");
-    }     
-    let uni : University | null = await prisma.university.findFirst({where : {email : String(session.user.email)}})
-    if(!uni){
-      return NextResponse.json({message : "Invalid Account Token"}, {status : 409});
     }
-    return NextResponse.json({acc : uni});
+    let uni: University | null = await prisma.university.findFirst({
+      where: { email: String(session.user.email) },
+    });
+    if (!uni) {
+      return NextResponse.json(
+        { message: "Invalid Account Token" },
+        { status: 409 }
+      );
+    }
+    return NextResponse.json({ acc: uni });
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }
 }
-
 
 export async function PATCH(r: Request) {
   try {
@@ -32,7 +34,7 @@ export async function PATCH(r: Request) {
       data: body,
     });
 
-    return NextResponse.json({message : "success!"})
+    return NextResponse.json({ message: "success!" });
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }

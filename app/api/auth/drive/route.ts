@@ -1,13 +1,17 @@
 import prisma from "@/prisma/PrismaClient";
 import { DrivePatchRequest, PlacementDriveRequest } from "@/types";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authConfig } from "../[...nextauth]/route";
+import { csvToArray, formDataToJSON } from "../../(helpers)/parsers";
+import { saveFile } from "../../(helpers)/upload";
 
 function validate(body: PlacementDriveRequest): [boolean, string] {
   if (!body.company_name) return [false, "company name"];
   if (!body.company_about) return [false, "about company"];
   if (!body.company_website) return [false, "company website"];
   if (!body.drive_name) return [false, "name"];
-  if (!body.batch_requried) return [false, "batch"];
+  if (!body.batch_required) return [false, "batch"];
   if (!body.bond) return [false, "bond"];
   if (!body.closes_at) return [false, "closing time"];
   if (!body.date_of_drive) return [false, "date of drive"];
@@ -27,17 +31,64 @@ function validate(body: PlacementDriveRequest): [boolean, string] {
   return [true, "success"];
 }
 
-export async function POST(req: Request) {
+const _format = (
+  _data: PlacementDriveRequest & {
+    company_logo?: any;
+    job_description?: any;
+  }
+) => {
+  delete _data.company_logo;
+  delete _data.job_description;
+
+  _data.positions = csvToArray(String(_data.positions));
+  _data.skills_required = csvToArray(String(_data.skills_required));
+  _data.date_of_drive = new Date(_data.date_of_drive);
+  _data.closes_at = new Date(_data.closes_at);
+  _data.batch_required = Number(_data.batch_required);
+  _data.allowed_backlogs = Number(_data.allowed_backlogs);
+  _data.hsc_result_cutoff = Number(_data.hsc_result_cutoff);
+  _data.current_cgpa_cutoff = Number(_data.current_cgpa_cutoff);
+  _data.matric_result_cutoff = Number(_data.matric_result_cutoff);
+};
+
+export async function POST(r: Request) {
   try {
-    const body: PlacementDriveRequest = await req.json();
-    const validation = validate(body);
+    const session = await getServerSession(authConfig);
+    if (!session || !session.user) {
+      throw new Error("Invalid Session!");
+    }
+    const fdata = await r.formData();
+    let companyLogo = fdata.get("company_logo") as File;
+    let jd = fdata.get("job_description") as File;
+    const _data: PlacementDriveRequest & {
+      company_logo?: any;
+      job_description?: any;
+    } = formDataToJSON(fdata);
+
+    _format(_data);
+    const validation = validate(_data);
     if (!validation[0]) {
       return NextResponse.json(
         { message: `Missing/Invalid ${validation[1]}` },
         { status: 400 }
       );
     }
-    let drive = await prisma.placementDrive.create({ data: body });
+    let drive = await prisma.placementDrive.create({ data: _data });
+    if (companyLogo != null) {
+      await saveFile(companyLogo, `D-${drive.id}-logo`);
+      await prisma.placementDrive.update({
+        where: { id: drive.id },
+        data: { has_logo_attachment: true },
+      });
+    }
+
+    if (jd != null) {
+      await saveFile(jd, `D-${drive.id}-jd`);
+      await prisma.placementDrive.update({
+        where: { id: drive.id },
+        data: { has_jd_attachment: true },
+      });
+    }
     return NextResponse.json({ message: "Drive created successfully!" });
   } catch (e: any) {
     console.log(e.message);
@@ -45,12 +96,12 @@ export async function POST(req: Request) {
   }
 }
 
-export async function PATCH(req: Request) {
+export async function PATCH(r: Request) {
   try {
-    const body: DrivePatchRequest = await req.json();
+    const _data: DrivePatchRequest = await r.json();
     let update = await prisma.placementDrive.update({
-      where: { id: body.id },
-      data: body,
+      where: { id: _data.id },
+      data: _data,
     });
     return NextResponse.json({ message: "Drive Updated Successfully" });
   } catch (e: any) {
@@ -58,11 +109,11 @@ export async function PATCH(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET(r: Request) {
   try {
-    const { searchParams } = new URL(req.url);
+    const { searchParams } = new URL(r.url);
     let id = searchParams.get("id");
-    if (Number(id) || Number(id)==0) {
+    if (Number(id) || Number(id) == 0) {
       //case for a selective drive
       let drive = await prisma.placementDrive.findFirst({
         where: { id: Number(id) },
