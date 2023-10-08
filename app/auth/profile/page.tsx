@@ -1,16 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getServerSession } from "next-auth";
-import { authConfig } from "@/app/api/auth/[...nextauth]/route";
-import prisma from "@/prisma/PrismaClient";
-async function getAccount() {
-  const data = await getServerSession(authConfig);
-  let acc = await prisma.university .findFirst({ where: { email:  String(data?.user?.email)} });
-  return acc;
-}
+import { getUniversityDetails } from "@/utils/getUniversityAccount";
+
 
 export default async function Profile() {
-  let acc = await getAccount();
+  let acc = await getUniversityDetails();
   return (
     <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
       <Link href="/auth/profile/edit">
@@ -27,7 +21,7 @@ export default async function Profile() {
           <Image
           className="my-10 h-[200px] w-[200px] text-center bg-slate-300 rounded-[50%] overflow-hidden border-2 shadow-lg"
             alt="Logo"
-            src={`/U-${acc?.id}-pfp.jpg`}
+            src={`/U-${acc?.id}-logo.jpg`}
             width={200}
             height={200}
           />

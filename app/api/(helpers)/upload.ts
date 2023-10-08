@@ -7,12 +7,11 @@ export async function saveFile(file : File, fileName: string) {
   }
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  const dir = join("../../../../../public");
-  const path = join(__dirname, dir, fileName);
-  if (!fs.existsSync(join(__dirname, dir))) {
-    fs.mkdirSync(join(__dirname, dir));
+  const dir = join(process.cwd(), '/public');
+  const path = join(dir, fileName);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(path);
   }
-  console.log(path);
   fs.writeFile(path, buffer, (err) => {
     if (err) {
       console.log(err);

@@ -51,6 +51,10 @@ const _format = (
   _data.matric_result_cutoff = Number(_data.matric_result_cutoff);
 };
 
+interface FileUpdate {
+  has_logo_attachment?: boolean;
+  has_jd_attachment?: boolean;
+}
 export async function POST(r: Request) {
   try {
     const session = await getServerSession(authConfig);
@@ -74,24 +78,22 @@ export async function POST(r: Request) {
       );
     }
     let drive = await prisma.placementDrive.create({ data: _data });
+    let fileUpdateConfig: FileUpdate = {};
     if (companyLogo != null) {
-      await saveFile(companyLogo, `D-${drive.id}-logo`);
-      await prisma.placementDrive.update({
-        where: { id: drive.id },
-        data: { has_logo_attachment: true },
-      });
+      await saveFile(companyLogo, `D-${drive.id}-logo.jpg`);
+      fileUpdateConfig.has_logo_attachment = true;
     }
 
     if (jd != null) {
-      await saveFile(jd, `D-${drive.id}-jd`);
-      await prisma.placementDrive.update({
-        where: { id: drive.id },
-        data: { has_jd_attachment: true },
-      });
+      await saveFile(jd, `D-${drive.id}-jd.pdf`);
+      fileUpdateConfig.has_jd_attachment = true;
     }
+    await prisma.placementDrive.update({
+      where: { id: drive.id },
+      data: fileUpdateConfig,
+    });
     return NextResponse.json({ message: "Drive created successfully!" });
   } catch (e: any) {
-    console.log(e.message);
     return NextResponse.json({ message: e.message }, { status: 500 });
   }
 }

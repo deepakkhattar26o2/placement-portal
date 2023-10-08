@@ -3,32 +3,29 @@ import axios from "axios";
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 
-
-export default function EmailForm({_setEmail, setOtp} : any) {
+export default function EmailForm({ _setEmail, setOtp }: any) {
   const [email, setEmail] = useState("");
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const handleFormSubmit = (e : FormEvent)=>{
+  const handleFormSubmit = (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    axios.post('/api/verify?forgot=true&user=uni', {
-        email : email
-    }).then(
-        ({data})=>{
-            console.log(data)
-            setLoading(false);
-            _setEmail(email);
-            setOtp(data.otp);
+    axios
+      .post("/api/verify?forgot=true&user=uni", {
+        email: email,
+      })
+      .then(({ data }) => {
+        setLoading(false);
+        _setEmail(email);
+        setOtp(data.otp);
+      })
+      .catch((e: any) => {
+        setLoading(false);
+        if (e.response?.data?.message) {
+          toast.error(e.response.data.message, { autoClose: 1000 });
         }
-    )
-    .catch((e : any)=>{
-        setLoading(false)
-        if(e.response?.data?.message){
-            toast.error(e.response.data.message, {autoClose : 1000});
-        }
-        console.log(e);
-    })
-}
+      });
+  };
 
   return (
     <div className="flex items-center justify-center h-screen bg-primary">
@@ -40,7 +37,12 @@ export default function EmailForm({_setEmail, setOtp} : any) {
         </div>
 
         <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={(e: FormEvent) => {handleFormSubmit(e)}}>
+          <form
+            className="space-y-6"
+            onSubmit={(e: FormEvent) => {
+              handleFormSubmit(e);
+            }}
+          >
             <div>
               <label
                 htmlFor="email"

@@ -9,10 +9,10 @@ export default function CreateDrivePage() {
   const [driveData, setDriveData] = useState<PlacementDriveRequest & any>();
   const [logo, setLogo] = useState<File | null>();
   const [jd, setJD] = useState<File | null>();
+
   const createDrive = (e: FormEvent) => {
     e.preventDefault();
     let formData = jsonToFormData(driveData);
-    console.log(driveData)
     if (jd) {
       formData.append("job_description", jd);
     }
@@ -25,9 +25,12 @@ export default function CreateDrivePage() {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then(() =>
-        toast.success("Drive created Successfully", { autoClose: 1000 })
-      )
+      .then(() => {
+        setDriveData(null);
+        setJD(null);
+        setLogo(null);
+        toast.success("Drive created Successfully", { autoClose: 1000 });
+      })
       .catch((e) => toast.error("Something Went Wrong", { autoClose: 1000 }));
   };
   return (
@@ -71,18 +74,23 @@ export default function CreateDrivePage() {
               <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Company Website
               </label>
-              <input
-                required
-                className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
-                type="text"
-                placeholder="Company Website"
-                onChange={(e) => {
-                  setDriveData({
-                    ...driveData,
-                    company_website: e.target.value,
-                  });
-                }}
-              />
+              <div className="w-64 bg-white flex rounded border">
+                <div className="bg-gray-200 w-[25%] flex justify-center items-center text-gray-400">
+                  https://
+                </div>
+                <input
+                  required
+                  className="shadow appearance-none w-[75%] text-gray-700 py-2 px-3 leading-tight "
+                  type="text"
+                  placeholder="Company Website"
+                  onChange={(e) => {
+                    setDriveData({
+                      ...driveData,
+                      company_website: e.target.value,
+                    });
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

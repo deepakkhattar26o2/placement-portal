@@ -82,7 +82,6 @@ function SideBar() {
                 e.preventDefault();
                 ele[3]();
               }
-              console.log(idx);
               setId(idx);
             }}
           >

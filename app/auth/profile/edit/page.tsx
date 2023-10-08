@@ -7,7 +7,7 @@ import { AccountPatchRequest } from "@/types";
 import { toast, ToastContainer } from "react-toastify";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
+import { jsonToFormData } from "@/app/api/(helpers)/parsers";
 function setAccount(setAcc: any) {
   axios
     .get(`/api/auth/university/account`)
@@ -15,41 +15,7 @@ function setAccount(setAcc: any) {
       setAcc(data.acc);
     })
     .catch((e: Error) => {
-      console.log(e.message);
-    });
-}
-
-function handleImageUpload(img: any) {
-  let data = new FormData();
-  data.append("file", img);
-  axios
-    .post(
-      `/api/upload?attachment_type=pfp&use=UNIVERSITY`,
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    )
-    .then(() => {
-      toast.success("Logo Uploaded Successfully!", { autoClose: 1000 });
-    })
-    .catch((e: Error) => {
-      console.log(e.message);
-      toast.error("Something went wrong with logo upload", { autoClose: 1000 });
-    });
-}
-
-function updateAccount(data: AccountPatchRequest, router: AppRouterInstance) {
-  axios
-    .patch("/api/auth/university/account", data)
-    .then(() => {
-      router.push("/auth/profile");
-    })
-    .catch((e: Error) => {
-      console.log(e.message);
-      toast.error("Something went wrong", { autoClose: 1000 });
+      toast.error("Something went wrong!", {autoClose : 1000})
     });
 }
 
@@ -58,7 +24,24 @@ export default function Profile() {
   const [file, setFile] = useState<any>();
   const router = useRouter();
   const imgRef = useRef<any>();
-  const {data} = useSession();
+  const updateAccount = () => {
+    let formData = jsonToFormData(acc);
+    formData.append("logo", file);
+    axios
+      .patch("/api/auth/university/account", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then(() => {
+        toast.success("Profile updated successfully", {autoClose : 1000});
+        router.push("/auth/profile");
+      })
+      .catch((e: Error) => {
+        toast.error("Something went wrong", { autoClose: 1000 });
+      });
+  };
+
   useEffect(() => {
     setAccount(setAcc);
   }, []);
@@ -68,7 +51,7 @@ export default function Profile() {
         <button
           className="bg-secondary text-third hover:bg-[#0073ff] h-10 w-20 rounded-lg m-2"
           onClick={() => {
-            updateAccount(acc, router);
+            updateAccount();
           }}
         >
           Save
@@ -76,7 +59,7 @@ export default function Profile() {
         <button
           className="bg-red-500 text-third hover:bg-[#ff6464] h-10 w-20 rounded-lg m-2"
           onClick={() => {
-            router.push("/auth/profile");
+            router.back();
           }}
         >
           Cancel
@@ -100,14 +83,6 @@ export default function Profile() {
                   width={200}
                   height={200}
                 />
-                <button
-                  className="bg-green-500 text-third hover:bg-[#59df60] h-10 w-20 rounded-lg m-2"
-                  onClick={(e) => {
-                    handleImageUpload(file);
-                  }}
-                >
-                  Upload
-                </button>
               </div>
             ) : (
               <Image
@@ -116,7 +91,7 @@ export default function Profile() {
                 onClick={() => {
                   imgRef.current?.click();
                 }}
-                src={`/U-${acc?.id}-pfp.jpg`}
+                src={`/U-${acc?.id}-logo.jpg`}
                 width={200}
                 height={200}
               />
