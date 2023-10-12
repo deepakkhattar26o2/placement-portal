@@ -7,7 +7,6 @@ import {
   FaLayerGroup,
   FaPlus,
   FaHome,
-  FaUserAlt,
   FaSignOutAlt,
 } from "react-icons/fa";
 import {MdGroups2} from 'react-icons/md'
@@ -39,7 +38,7 @@ function SideBarIcon({ icon, text, selectedProp }: any) {
   );
 }
 
-let temp = [
+let icons = [
   [<FaHome key={0} size="22" />, "Home", "home"],
   [<FaPlus key={1} size="22" />, "Create Drive", "create"],
   [<FaLayerGroup key={2} size="22" />, "Drives", "drives"],
@@ -57,8 +56,9 @@ let temp = [
 function setValidId(path: string, setId: any) {
   if (path.includes("home")) setId(0);
   else if (path.includes("create")) setId(1);
-  else if (path.includes("all")) setId(2);
-  else if (path.includes("profile")) setId(3);
+  else if (path.includes("drives")) setId(2);
+  else if (path.includes("students")) setId(3);
+  else if (path.includes("profile")) setId(4);
 }
 function SideBar() {
   const [id, setId] = useState<number>();
@@ -72,7 +72,7 @@ function SideBar() {
         flex flex-col bg-black shadow-sm shadow-white 
         "
     >
-      {temp.map((ele: any, idx) => {
+      {icons.map((ele: any, idx) => {
         return (
           <Link
             href={`/auth/${ele[2]}`}

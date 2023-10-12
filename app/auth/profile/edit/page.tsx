@@ -3,9 +3,7 @@ import { University } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { AccountPatchRequest } from "@/types";
 import { toast, ToastContainer } from "react-toastify";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import Image from "next/image";
 import { jsonToFormData } from "@/app/api/(helpers)/parsers";
 function setAccount(setAcc: any) {

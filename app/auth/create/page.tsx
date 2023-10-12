@@ -2,14 +2,14 @@
 import { jsonToFormData } from "@/app/api/(helpers)/parsers";
 import { PlacementDriveRequest } from "@/types";
 import axios from "axios";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function CreateDrivePage() {
   const [driveData, setDriveData] = useState<PlacementDriveRequest & any>();
   const [logo, setLogo] = useState<File | null>();
   const [jd, setJD] = useState<File | null>();
-
+  const formRef = useRef<any>();
   const createDrive = (e: FormEvent) => {
     e.preventDefault();
     let formData = jsonToFormData(driveData);
@@ -26,9 +26,7 @@ export default function CreateDrivePage() {
         },
       })
       .then(() => {
-        setDriveData(null);
-        setJD(null);
-        setLogo(null);
+        formRef.current.reset();
         toast.success("Drive created Successfully", { autoClose: 1000 });
       })
       .catch((e) => toast.error("Something Went Wrong", { autoClose: 1000 }));
@@ -36,7 +34,7 @@ export default function CreateDrivePage() {
   return (
     <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-lg shadow-xl">
       <div className="text-3xl font-bold">Create Drive</div>
-      <form className="p-10 flex flex-col" onSubmit={createDrive}>
+      <form className="p-10 flex flex-col" onSubmit={createDrive} ref={formRef}>
         <div className="shadow-lg rounded-lg p-6 border-2 bg-slate-100 mb-4">
           <div className="mb-4 font-semibold text-slate-500">
             Company Details
@@ -244,6 +242,7 @@ export default function CreateDrivePage() {
               </label>
               <input
                 required
+                step="0.01"
                 className="shadow appearance-none border rounded w-64 py-2 px-3 text-gray-700 leading-tight "
                 type="number"
                 placeholder="Current CGPA Cutoff"
