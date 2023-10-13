@@ -8,7 +8,7 @@ export default async function Profile() {
   return (
     <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
       <Link href="/auth/profile/edit">
-        <button className="fixed bg-secondary text-third hover:bg-[#0073ff] top-12 right-16 h-10 w-20 rounded-lg m-2">
+        <button className="fixed bg-secondary text-third hover:bg-hover_secondary top-12 right-16 h-10 w-20 rounded-lg m-2">
           Edit
         </button>
       </Link>

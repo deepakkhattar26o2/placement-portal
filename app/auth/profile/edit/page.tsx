@@ -47,7 +47,7 @@ export default function Profile() {
     <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-xl shadow-xl">
       <div className="fixed top-12 right-16 flex flex-col ">
         <button
-          className="bg-secondary text-third hover:bg-[#0073ff] h-10 w-20 rounded-lg m-2"
+          className="bg-secondary text-third hover:bg-hover_secondary h-10 w-20 rounded-lg m-2"
           onClick={() => {
             updateAccount();
           }}
@@ -55,7 +55,7 @@ export default function Profile() {
           Save
         </button>
         <button
-          className="bg-red-500 text-third hover:bg-[#ff6464] h-10 w-20 rounded-lg m-2"
+          className="bg-err text-third hover:bg-hover_err h-10 w-20 rounded-lg m-2"
           onClick={() => {
             router.back();
           }}

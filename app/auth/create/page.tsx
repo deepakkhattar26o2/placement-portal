@@ -426,7 +426,7 @@ export default function CreateDrivePage() {
         </div>
         <button
           type="submit"
-          className="flex w-auto self-center justify-center rounded-md bg-secondary px-4 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#0073ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="flex w-auto self-center justify-center rounded-md bg-secondary px-4 py-2 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-hover_secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           Create
         </button>

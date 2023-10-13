@@ -94,7 +94,7 @@ export default function PasswordForm({email} : any) {
                 disabled={!(password == cpassword && password.length >= 6)}
                 className={`flex w-full justify-center rounded-md  px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${
                   password == cpassword && password.length >= 6
-                    ? "bg-secondary hover:bg-[#0073ff] focus-visible:outline-indigo-600"
+                    ? "bg-secondary hover:bg-hover_secondary focus-visible:outline-indigo-600"
                     : "bg-red-600 hover:cursor-auto"
                 }`}
               >
