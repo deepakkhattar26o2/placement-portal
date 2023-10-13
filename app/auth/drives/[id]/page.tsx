@@ -1,5 +1,4 @@
-import { getPlacementDrive } from "@/utils/getPlacementDriveDetails";
-import Link from "next/link";
+import { getPlacementDrive } from "@/utils/placement";
 import Image from "next/image";
 export default async function Drive({ params }: any) {
   let drive = await getPlacementDrive(Number(params.id));

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getUniversityDetails } from "@/utils/getUniversityAccount";
+import { getUniversityDetails } from "@/utils/university";
 
 
 export default async function Profile() {

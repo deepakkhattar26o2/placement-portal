@@ -123,7 +123,9 @@ export async function GET(r: Request) {
       return NextResponse.json({ drive: drive });
     } else if (id == "all") {
       //drive history
-      let drives = await prisma.placementDrive.findMany();
+      let drives = await prisma.placementDrive.findMany({
+        include: { _count: { select: { participants: true } } },
+      });
       return NextResponse.json({ drives: drives });
     } else {
       //latest drive
