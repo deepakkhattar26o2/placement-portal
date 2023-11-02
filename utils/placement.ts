@@ -17,6 +17,13 @@ export const getAllPlacementDrives = cache(async () => {
 });
 
 export const getPlacementDrive = cache(async (id: number) => {
-  let drive = await prisma.placementDrive.findFirst({ where: { id: id } });
+  let drive = await prisma.placementDrive.findFirst(
+    { 
+      where: { id: id }, 
+      include : {
+        _count : {select : {participants : true}}
+      }
+    }  
+  );
   return drive;
 });

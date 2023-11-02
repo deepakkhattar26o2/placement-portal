@@ -1,8 +1,7 @@
 import { getAllPlacementDrives } from "@/utils/placement";
-import { PlacementDrive } from "@prisma/client";
-import moment from "moment";
 import Link from "next/link";
 import Image from "next/image";
+import { formatDateToString } from "@/app/api/(helpers)/parsers";
 
 interface DriveProps {
   drive: {
@@ -21,7 +20,7 @@ const DriveTab = ({ drive }: DriveProps) => {
   return (
     <Link
       href={`/auth/drives/${drive.id}`}
-      className="hover:shadow-xl shadow-md bg-gray-100 transition-all duration-300  p-3 rounded-md border flex mb-5 justify-between"
+      className="hover:shadow-lg hover:bg-hover_secondary shadow-md bg-secondary text-white transition-all duration-300  p-3 rounded-2xl hover:rounded-lg border flex mb-5 justify-between"
     >
       <div className="flex">
         <Image
@@ -32,19 +31,19 @@ const DriveTab = ({ drive }: DriveProps) => {
           height={50}
         />
         <div>
-          <div className="text-lg font-bold text-gray-900">
+          <div className="text-lg font-bold ">
             {drive.company_name}
           </div>
-          <div className="text-sm font-semibold text-gray-500">
+          <div className="text-sm font-semibold ">
             {drive.drive_name}
           </div>
         </div>
       </div>
       <div className="flex flex-col items-end">
-        <div className="font-sm font-semibold text-gray-900">
-          {moment(drive.created_at).format("DD/MM/YY")}
+        <div className="font-sm font-semibold ">
+          {formatDateToString(drive.created_at)}
         </div>
-        <div className="font-bold text-gray-500">
+        <div className="font-bold ">
           {drive._count?.participants || 0} Students
         </div>
       </div>
@@ -55,7 +54,7 @@ const DriveTab = ({ drive }: DriveProps) => {
 export default async function Drives() {
   let drives = await getAllPlacementDrives();
   return (
-    <div className="flex flex-col items-center w-full h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
+    <div className="flex flex-col items-center h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
       <div className="font-bold leading-7 text-3xl  text-gray-900">
         All Drives
       </div>
