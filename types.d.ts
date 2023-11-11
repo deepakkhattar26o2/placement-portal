@@ -17,7 +17,7 @@ export interface StudentSignupRequest {
   password: string;
   first_name: string;
   last_name: string;
-  uid: string;
+  uid: stri ng;
 }
 
 export interface StudentLoginRequest {

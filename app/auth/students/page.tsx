@@ -12,8 +12,8 @@ export default async function StudentDetails() {
   const students = await getStudentDetails();
   if (students.length == 0) {
     return (
-      <div className="flex flex-col justify-center items-center h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
-        No Students Registered!
+      <div className="flex flex-col m-10 items-center h-screen bg-third p-5 rounded-lg shadow-xl justify-center text-lg font-light">
+        No Student Details Found!
       </div>
     );
   }

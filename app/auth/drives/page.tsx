@@ -5,10 +5,10 @@ import { formatDateToString } from "@/app/api/(helpers)/parsers";
 
 interface DriveProps {
   drive: {
-    id : number,
-    drive_name : string,
-    company_name : string,
-    created_at : Date
+    id: number;
+    drive_name: string;
+    company_name: string;
+    created_at: Date;
   } & {
     _count: {
       participants: number;
@@ -31,12 +31,8 @@ const DriveTab = ({ drive }: DriveProps) => {
           height={50}
         />
         <div>
-          <div className="text-lg font-bold ">
-            {drive.company_name}
-          </div>
-          <div className="text-sm font-semibold ">
-            {drive.drive_name}
-          </div>
+          <div className="text-lg font-bold ">{drive.company_name}</div>
+          <div className="text-sm font-semibold ">{drive.drive_name}</div>
         </div>
       </div>
       <div className="flex flex-col items-end">
@@ -53,6 +49,13 @@ const DriveTab = ({ drive }: DriveProps) => {
 
 export default async function Drives() {
   let drives = await getAllPlacementDrives();
+  if (drives.length == 0) {
+    return (
+      <div className="flex flex-col m-10 items-center h-screen bg-third p-5 rounded-lg shadow-xl justify-center text-lg font-light">
+        No Placement Drive Records Found!
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col items-center h-screen m-10 bg-third p-5 rounded-lg shadow-xl">
       <div className="font-bold leading-7 text-3xl  text-gray-900">

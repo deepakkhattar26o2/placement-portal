@@ -44,7 +44,7 @@ export default function Profile() {
     setAccount(setAcc);
   }, []);
   return (
-    <div className="flex flex-col h-screen m-10 bg-third p-5 rounded-xl shadow-xl">
+    <div className="flex flex-col h-auto m-10 bg-third p-5 rounded-xl shadow-xl">
       <div className="fixed top-12 right-16 flex flex-col ">
         <button
           className="bg-secondary text-third hover:bg-hover_secondary h-10 w-20 rounded-lg m-2"
