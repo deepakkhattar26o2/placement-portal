@@ -31,7 +31,7 @@ const getTabDetails = async () => {
   let openDrives = await prisma.placementDrive.count({
     where: {
       closes_at: {
-        lt: new Date(),
+        gt: new Date(),
       },
     },
   });

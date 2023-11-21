@@ -22,7 +22,7 @@ const LineGraph = ({ data } : LineGraphProps) => {
             labels: Object.keys(data.months),
             datasets: [
               {
-                label: 'Data Frequency',
+                label: 'Placement Drives',
                 data: Object.values(data.months),
                 borderColor: 'rgba(75,192,192,1)',
                 borderWidth: 2,
