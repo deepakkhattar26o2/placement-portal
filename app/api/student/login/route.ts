@@ -8,12 +8,11 @@ import { NextResponse } from "next/server";
 const validate = (b: StudentLoginRequest): [boolean, string] => {
   var field = "";
   if (!b.password) field = "password";
-  else if (!b.university_email || !b.university_email.endsWith("@gmail.com"))
+  else if (!b.university_email)
     field = "email";
   if (field) {
     return [false, field];
   }
-
   return [true, ""];
 };
 

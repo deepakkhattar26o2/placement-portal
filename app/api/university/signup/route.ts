@@ -40,9 +40,8 @@ function validate(body: SignupRequest & {role : Role}): [boolean, string] {
         data: body,
       });
       delete _acc.password;
-      let token = jwt.sign(_acc, String(process.env.JWT_SECRET));
       
-      return NextResponse.json({ token : token , message: "Account created" }, { status: 200 });
+      return NextResponse.json({message: "Account created" }, { status: 200 });
     } catch (e: any) {
       return NextResponse.json({ message: e.message }, { status: 500 });
     }

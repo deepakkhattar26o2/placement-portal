@@ -94,6 +94,12 @@ export interface StudentPatchRequest {
   matric_result?: number;
   hsc_result?: number;
   number_of_backlogs?: number;
+  resume_1?: any;
+  resume_2?: any;
+  resume_3?: any;
+  matric_result?: any;
+  hsc_result?: any;
+  pfp?: any;
 }
 
 export type CurrentUser = {

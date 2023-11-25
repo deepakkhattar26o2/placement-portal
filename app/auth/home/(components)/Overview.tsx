@@ -42,7 +42,7 @@ async function Overview() {
   let data = await getGraphData();
   return (
     <div className="border rounded-md w-1/2 p-2 m-2 h-[50vh] shadow-md">
-      <div className="text-xl mb-2 font-bold">Overview</div>
+      <div className="ml-2 text-xl mb-2 font-bold">Overview</div>
       <div>
         <LineGraph data={data} />
       </div>
