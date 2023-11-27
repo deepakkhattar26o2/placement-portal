@@ -8,16 +8,7 @@ interface InfoProps {
   name: string;
   description: string;
 }
-const InfoTab = ({ name, description }: InfoProps) => {
-  return (
-    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-      <dt className="text-sm font-medium leading-6 text-gray-900">{name}</dt>
-      <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0 overflow-auto h-44">
-        {description}
-      </dd>
-    </div>
-  );
-};
+
 
 export default async function Drive({ params }: any) {
   let drive = await getPlacementDrive(Number(params.id));

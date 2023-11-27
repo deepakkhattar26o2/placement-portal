@@ -14,7 +14,7 @@ interface props {
 function DataTab({ title, logo, monthlyStat, color }: props) {
   return (
     <div
-      className={`border rounded-lg w-1/4 p-3 mx-2 h-28 flex flex-col justify-between shadow-md ${color}`}
+      className={`border  rounded-lg w-1/4 p-3 mx-2 h-32 flex flex-col justify-between shadow-md ${color}`}
     >
       <div className="flex justify-between items-center m-2">
         <div>{title}</div>
@@ -47,25 +47,25 @@ const getTabDetails = async () => {
       title: "Drives",
       logo: <SiOnlyoffice />,
       monthlyStat: drives,
-      color: "bg-red-500",
+      color: "bg-red-400",
     },
     {
       title: "Registrations",
       logo: <GiArchiveRegister />,
       monthlyStat: registrations,
-      color: "bg-green-500",
+      color: "bg-green-400",
     },
     {
       title: "Open Drives",
       logo: <SiProcessingfoundation />,
       monthlyStat: openDrives ,
-      color: "bg-blue-500",
+      color: "bg-blue-400",
     },
     {
       title: "Ongoing Drives",
       logo: <HiOutlineOfficeBuilding />,
       monthlyStat: ongoingDrives,
-      color: "bg-yellow-500",
+      color: "bg-yellow-400",
     },
   ];
 };
