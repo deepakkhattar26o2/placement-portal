@@ -29,3 +29,23 @@ export const getStudentDetailsById = cache(async (id: number) => {
   });
   return student;
 });
+
+export const getDriveParticipants = cache(async (driveId: number) => {
+  let data = await prisma.placementDrive.findFirst({
+    where: { id: driveId },
+    select: {
+      participants: {
+        select: {
+          student: {
+            include : {
+              _count : {
+                select : {drives : true}
+              }
+            }
+          },
+        },
+      },
+    },
+  });
+  return data;
+});
