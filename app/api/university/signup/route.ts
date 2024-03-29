@@ -3,7 +3,6 @@ import { SignupRequest } from "@/types";
 import { Role, University } from "@prisma/client";
 import { NextResponse } from "next/server";
 import * as bcr from 'bcrypt'
-import * as jwt from 'jsonwebtoken'
 
 function validate(body: SignupRequest & {role : Role}): [boolean, string] {
     if (!body.email || !body.email.endsWith("gmail.com")) return [false, "email"];

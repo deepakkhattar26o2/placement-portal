@@ -1,8 +1,10 @@
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import { SiProcessingfoundation, SiOnlyoffice } from "react-icons/si";
 import { HiOutlineOfficeBuilding } from "react-icons/hi";
 import { GiArchiveRegister } from "react-icons/gi";
 import prisma from "@/prisma/PrismaClient";
+import axios from "axios";
 
 interface props {
   title: string;
@@ -25,54 +27,70 @@ function DataTab({ title, logo, monthlyStat, color }: props) {
   );
 }
 
-const getTabDetails = async () => {
-  let drives = await prisma.placementDrive.count();
-  let registrations = await prisma.studentDrive.count();
-  let openDrives = await prisma.placementDrive.count({
-    where: {
-      closes_at: {
-        gt: new Date(),
-      },
-    },
-  });
-  let ongoingDrives = await prisma.placementDrive.count({
-    where: {
-      date_of_drive: {
-        gte: new Date(),
-      },
-    },
-  });
-  return [
+const DataTabs = () => {
+  const [TabDetails, setTabDetails] = useState<props[]>([
     {
       title: "Drives",
       logo: <SiOnlyoffice />,
-      monthlyStat: drives,
+      monthlyStat: 0,
       color: "bg-red-400",
     },
     {
       title: "Registrations",
       logo: <GiArchiveRegister />,
-      monthlyStat: registrations,
+      monthlyStat: 0,
       color: "bg-green-400",
     },
     {
       title: "Open Drives",
       logo: <SiProcessingfoundation />,
-      monthlyStat: openDrives ,
+      monthlyStat: 0 ,
       color: "bg-blue-400",
     },
     {
       title: "Ongoing Drives",
       logo: <HiOutlineOfficeBuilding />,
-      monthlyStat: ongoingDrives,
+      monthlyStat: 0,
       color: "bg-yellow-400",
     },
-  ];
-};
+  ])
 
+  useEffect(()=>{
+    axios.get(`/api/auth/dashboard`).then(
+      ({data})=>{
+        let {drives, registrations, openDrives, ongoingDrives} = data;
+        setTabDetails([
+          {
+            title: "Drives",
+            logo: <SiOnlyoffice />,
+            monthlyStat: drives,
+            color: "bg-red-400",
+          },
+          {
+            title: "Registrations",
+            logo: <GiArchiveRegister />,
+            monthlyStat: registrations,
+            color: "bg-green-400",
+          },
+          {
+            title: "Open Drives",
+            logo: <SiProcessingfoundation />,
+            monthlyStat: openDrives ,
+            color: "bg-blue-400",
+          },
+          {
+            title: "Ongoing Drives",
+            logo: <HiOutlineOfficeBuilding />,
+            monthlyStat: ongoingDrives,
+            color: "bg-yellow-400",
+          },
+        ])
 
-const DataTabs = async () => {
-  let TabDetails: props[] = await getTabDetails();
+      }
+    ).catch()
+
+  }, [])
+
   return (
     <div className="flex justify-between mb-5">
       {TabDetails.map((tab, idx) => {

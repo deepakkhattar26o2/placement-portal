@@ -1,6 +1,7 @@
-import { getRecentPlacementDrives } from "@/utils/placement";
-import React from "react";
+'use client'
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import axios from "axios";
 
 interface props {
   driveName: string;
@@ -32,13 +33,20 @@ const DriveTab = ({ id, driveName, companyName, participants }: props) => {
   );
 };
 
-async function RecentDrives() {
-  const recentDrives = await getRecentPlacementDrives();
+function RecentDrives() {
+  const [recentDrives, setRecentDrives] = useState<any>([]);
+  useEffect(()=>{
+    axios.get(`/api/auth/dashboard?recent=true`)
+    .then(
+      ({data})=>{setRecentDrives(data.recentDrives);}
+    )
+    .catch(e=>console.log(e.message))
+  }, [])
   return (
     <div className="border p-2 m-2 rounded-md w-1/2 h-[50vh] shadow-md">
       <div className="ml-2">
         <div className="text-xl mb-2 font-bold">Recent Drives</div>
-        {recentDrives.map((drive, idx) => {
+        {recentDrives.map((drive:any, idx : number) => {
           return (
             <DriveTab
               key={idx}

@@ -1,10 +1,8 @@
 import prisma from "@/prisma/PrismaClient";
 import { Student } from "@prisma/client";
-import { cache } from "react";
 
-export const revalidate = 600;
 
-export const getAllStudentDetails = cache(async () => {
+export const getAllStudentDetails = async () => {
   let details = await prisma.student.findMany({
     select: {
       id: true,
@@ -21,16 +19,16 @@ export const getAllStudentDetails = cache(async () => {
     },
   });
   return details;
-});
+}
 
-export const getStudentDetailsById = cache(async (id: number) => {
+export const getStudentDetailsById = async (id: number) => {
   let student: Student | null = await prisma.student.findFirst({
     where: { id: id },
   });
   return student;
-});
+}
 
-export const getDriveParticipants = cache(async (driveId: number) => {
+export const getDriveParticipants = async (driveId: number) => {
   let data = await prisma.placementDrive.findFirst({
     where: { id: driveId },
     select: {
@@ -48,4 +46,4 @@ export const getDriveParticipants = cache(async (driveId: number) => {
     },
   });
   return data;
-});
+}
