@@ -58,8 +58,8 @@ const handleUserFiles = async (fdata: FormData, userId: number) => {
   let resume1: File | null = fdata.get("resume_1") as File;
   let resume2: File | null = fdata.get("resume_2") as File;
   let resume3: File | null = fdata.get("resume_3") as File;
-  let matricResult: File | null = fdata.get("matric_result") as File;
-  let hscResult: File | null = fdata.get("hsc_result") as File;
+  let matricResult: File | null = fdata.get("matric_result_file") as File;
+  let hscResult: File | null = fdata.get("hsc_result_file") as File;
   let pfp: File | null = fdata.get("pfp") as File;
   if (resume1) {
     await saveFile(resume1, `S-${userId}-resume1.pdf`);
@@ -91,8 +91,8 @@ const formatData = (body: StudentPatchRequest) => {
   delete body.resume_1;
   delete body.resume_2;
   delete body.resume_3;
-  delete body.matric_result;
-  delete body.hsc_result;
+  delete body.matric_result_file;
+  delete body.hsc_result_file;
   delete body.pfp;
   if (body.batch) body.batch = Number(body.batch);
   if (body.has_gap_year) body.has_gap_year = Boolean(body.has_gap_year);
@@ -109,8 +109,11 @@ export async function PATCH(r: Request) {
     const fileConfig = await handleUserFiles(fdata, user.id);
     const body: StudentPatchRequest = formDataToJSON(fdata);
     formatData(body);
-    await prisma.student.update({where : {id : user.id}, data : {...body, ...fileConfig}})
-    return NextResponse.json({message : "Data Updated!"});
+    await prisma.student.update({
+      where: { id: user.id },
+      data: { ...body, ...fileConfig },
+    });
+    return NextResponse.json({ message: "Data Updated!" });
   } catch (e: any) {
     return NextResponse.json({ message: e.message }, { status: 500 });
   }

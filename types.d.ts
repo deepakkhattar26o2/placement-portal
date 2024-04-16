@@ -97,8 +97,8 @@ export interface StudentPatchRequest {
   resume_1?: any;
   resume_2?: any;
   resume_3?: any;
-  matric_result?: any;
-  hsc_result?: any;
+  matric_result_file?: any;
+  hsc_result_file?: any;
   pfp?: any;
 }
 
