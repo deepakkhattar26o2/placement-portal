@@ -18,14 +18,25 @@ model Student {
   course                   String?
   stream                   String?
   has_gap_year             Boolean?
+  //contact details
   personal_email           String?        @unique
   contact_number           String?
   alternate_contact_number String?
   current_address          String?
   permanent_address        String?
+  //UG
   current_cgpa             Float?
+  //
+  matric_school_name       String?
+  matric_city              String?
+  matric_board             String?
   matric_result            Float?
+  //
   hsc_result               Float?
+  hsc_city                 String?
+  hsc_board                String?
+  hsc_school_name          String?
+  //
   number_of_backlogs       Int?
   has_matric_attachment    Boolean        @default(false)
   has_hsc_attachment       Boolean        @default(false)
@@ -75,7 +86,7 @@ model StudentDrive {
   drive_id          Int
   created_at        DateTime       @default(now())
   drive             PlacementDrive @relation("participants", fields: [drive_id], references: [id])
-  student           Student           @relation("student-drive", fields: [student_id], references: [id])
+  student           Student        @relation("student-drive", fields: [student_id], references: [id])
 }
 
 model University {

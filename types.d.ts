@@ -78,6 +78,14 @@ export type PasswordUpdateRequest = { password: string } & (
 );
 
 export interface StudentPatchRequest {
+  matric_school_name?: String;
+  matric_city?: String;
+  matric_board?: String;
+
+  hsc_city?: String;
+  hsc_board?: String;
+  hsc_school_name?: String;
+
   first_name?: string;
   last_name?: string;
   uid?: string;
