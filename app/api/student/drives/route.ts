@@ -12,6 +12,16 @@ export async function POST(r: Request) {
   try {
     const _user = authDetails(r);
     const body: StudentDriveRequest = await r.json();
+
+    let existingRecord = await prisma.studentDrive.findFirst({
+      where : {
+        AND : [{student_id : _user.id}, {drive_id : body.drive_id}]
+      }
+    });
+    if(existingRecord){
+      return NextResponse.json({message : "Already Registered!"}, {status: 400})
+    }
+
     const studentDrive = await prisma.studentDrive.create({
       data: {
         student_id: _user.id,

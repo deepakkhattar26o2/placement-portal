@@ -12,6 +12,8 @@ model Student {
   university_email         String         @unique
   first_name               String
   last_name                String
+  dob                      DateTime?
+  nationality              String?
   password                 String
   uid                      String         @unique
   batch                    Int?
